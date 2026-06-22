@@ -7,6 +7,8 @@ import networkx as nx
 from PIL import Image, ImageDraw, ImageFont
 import base64
 import io
+import os
+import uvicorn
 
 app = FastAPI()
 
@@ -18,24 +20,6 @@ app.add_middleware(
 )
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-directorio_profes = {
-    "Dr. Heriberto Ruiz Tafoya": "Zona de docentes 1", "Dra. Ana Paola Galicia Gallardo": "Zona de docentes 1", 
-    "Dr. Javier Sanchez Lopez": "Zona de docentes 1", "Dr. Jesus Arturo Muñiz Jauregui": "Zona de docentes 1", 
-    "Dra. Diana Cristina Martinez Casillas": "Zona de docentes 1", "Dr. Jesus Emmanuel Solis Perez": "Zona de docentes 1", 
-    "Dr. Jose Carlos Ramirez Sanchez": "Zona de docentes 1", "Dra. Maria Guadalupe Garcia Gomar": "Zona de docentes 1", 
-    "Dr. Dante Ruiz Robles": "Zona de docentes 1", "Dra. Martha Cecilia Herrera Garcia": "Zona de docentes 1", 
-    "Dr. Mario Santana Cibrian": "Zona de docentes 1", "Dr. Hugo Harlan Mejia Madrid": "Zona de docentes 1", 
-    "Dr. Alberto Padro": "Zona de docentes 2", "Dra. Iliana del Rocio": "Zona de docentes 2", 
-    "Dr. Octavio Diaz": "Zona de docentes 2", "Dr. Raide A. Gonzalez": "Zona de docentes 3", 
-    "Dra. Marie C. Bedos": "Zona de docentes 3", "Dr. Raul Iturralde": "Zona de docentes 3", 
-    "Dr. Adolfo V. Magaldi": "Zona de docentes 3", "Dr. Jesus A. Franco": "Zona de docentes 3", 
-    "Dra. Marisol de la Mora": "Zona de docentes 3", "Dra. Elisa Ventura": "Zona de docentes 4", 
-    "Dr. Quetzalcoatl Cruz": "Zona de docentes 4", "Dr. David O. Perez": "Zona de docentes 4", 
-    "Dra. Rosario Vazquez": "Zona de docentes 4", "Dr. Ulises Olivares": "Zona de docentes 4", 
-    "Dra. Criseida Ruiz": "Zona de docentes 5", "Dr. Abdiel Hernandez": "Zona de docentes 5", 
-    "Dra. Monica A. Lopez": "Zona de docentes 5"
-}
 
 def generar_grafo():
     G = nx.Graph()
@@ -73,11 +57,8 @@ def serve_home():
 
 @app.post("/api/trazar")
 def trazar_ruta(peticion: PeticionRuta):
-    # Traducir si el destino es un profesor
-    destino_real = directorio_profes.get(peticion.destino, peticion.destino)
-
     try:
-        distancia, ruta = nx.bidirectional_dijkstra(G, source=peticion.origen, target=destino_real, weight='weight')
+        distancia, ruta = nx.bidirectional_dijkstra(G, source=peticion.origen, target=peticion.destino, weight='weight')
         
         img = Image.open('static/foto_enes_op.png').convert('RGBA')
         capa_ruta = Image.new('RGBA', img.size, (255, 255, 255, 0))
@@ -92,7 +73,7 @@ def trazar_ruta(peticion: PeticionRuta):
             px_y = int(H - (((y - abajo) / (arriba - abajo)) * H))
             return px_x, px_y
 
-        # --- VARIABLES DE TAMAÑO (Ajustadas para la nueva imagen) ---
+        # --- VARIABLES DE TAMAÑO ---
         grosor_linea = 6
         radio_int = 4
         grosor_borde_int = 2
@@ -103,7 +84,7 @@ def trazar_ruta(peticion: PeticionRuta):
         tamano_fuente = 24
         grosor_borde_texto = 3
         desplazamiento_texto = 20
-        # -----------------------------------------------------------
+        # ---------------------------
 
         # Dibujar líneas de la ruta
         for u, v in zip(ruta, ruta[1:]):
@@ -128,17 +109,15 @@ def trazar_ruta(peticion: PeticionRuta):
         draw.text((px_orig, py_orig - desplazamiento_texto), f"Inicio: {peticion.origen}", fill="white", font=fuente, anchor="ms", stroke_width=grosor_borde_texto, stroke_fill="#002B7A")
 
         # Dibujar Destino
-        px_dest, py_dest = a_pixeles(pos[destino_real][0], pos[destino_real][1])
+        px_dest, py_dest = a_pixeles(pos[peticion.destino][0], pos[peticion.destino][1])
         draw.ellipse([(px_dest - radio_ext, py_dest - radio_ext), (px_dest + radio_ext, py_dest + radio_ext)], fill="#BB8800", outline="white", width=grosor_borde_ext)
         draw.text((px_dest, py_dest - desplazamiento_texto), f"Destino: {peticion.destino}", fill="white", font=fuente, anchor="ms", stroke_width=grosor_borde_texto, stroke_fill="#BB8800")
         
         img_final = Image.alpha_composite(img, capa_ruta)
         buffer = io.BytesIO()
-        # Calidad en 70 para máxima velocidad de respuesta sin arruinar la imagen
         img_final.save(buffer, format="WEBP", quality=70) 
         img_b64 = base64.b64encode(buffer.getvalue()).decode()
 
-        # Solo dejamos un return limpio y correcto
         return {
             "exito": True,
             "distancia": distancia,
@@ -150,3 +129,9 @@ def trazar_ruta(peticion: PeticionRuta):
         return {"exito": False, "error": "No se encontró una ruta válida entre estos dos puntos."}
     except Exception as e:
         return {"exito": False, "error": str(e)}
+
+# Agregamos esta configuración final para asegurar que Render o el servidor de la escuela
+# puedan lanzar la aplicación reconociendo el puerto de forma automática.
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
