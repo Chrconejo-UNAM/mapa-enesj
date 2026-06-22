@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -7,27 +7,26 @@
     <link rel="icon" href="static/logo_unam_dorado.png" type="image/png">
     
     <style>
-        /* Importar fuente Roboto */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-        /* 1. PALETA BASE (Modo Claro por defecto) */
+        /* Paleta base (modo claro por defecto) */
         :root {
-            /* Colores Institucionales Fijos */
+            /* Colores institucionales fijos */
             --unam-blue: #002B7A;
             --unam-gold: #BB8800;
 
-            /* Fondo y Textos Generales */
+            /* Fondo y textos generales */
             --bg-color: #F8F9FA;
             --text-color: #212529;
             --card-bg: #FFFFFF;
             --border-color: #DEE2E6;
 
-            /* Menús Desplegables (Selects) */
+            /* Menús desplegables (selects) */
             --input-bg: #FFFFFF;
             --input-border: #CED4DA;
             --input-text: #495057;
 
-            /* Alertas Modo Claro */
+            /* Alertas modo claro */
             --alert-success-bg: #D1E7DD;
             --alert-success-text: #0F5132;
             --alert-success-border: #BADBCC;
@@ -41,10 +40,10 @@
             --alert-error-border: #F5C2C7;
         }
 
-        /* 2. PALETA MODO OSCURO (Se activa sola si el celular está en oscuro) */
+        /* 2. Paleta modo oscuro */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #050403; /* Tu --unam-black original */
+                --bg-color: #050403; /* --unam-black original */
                 --text-color: #F8F9FA;
                 --card-bg: #111111;
                 --border-color: #333333;
@@ -53,7 +52,7 @@
                 --input-border: #555555;
                 --input-text: #FFFFFF;
 
-                /* Alertas Modo Oscuro (las que ya tenías) */
+                /* Alertas modo oscuro */
                 --alert-success-bg: #152C20;
                 --alert-success-text: #57E08B;
                 --alert-success-border: #1B4332;
@@ -68,7 +67,7 @@
             }
         }
 
-        /* --- APLICACIÓN DE ESTILOS BASE --- */
+        /* APLICACIÓN DE ESTILOS BASE */
         body {
             font-family: 'Roboto', Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
@@ -78,7 +77,7 @@
             transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave al cambiar de modo */
         }
 
-        /* ENCABEZADO Y FOOTER (Siempre mantienen colores institucionales) */
+        /* Encabezado y pie de página (con colores institucionales) */
         .header-institucional, .footer {
             background-color: var(--unam-blue);
             color: white;
@@ -127,14 +126,14 @@
             .logos-izq, .logos-der { gap: 5px; }
         }
 
-        /* CONTENIDO PRINCIPAL */
+        /* Contenido principal */
         .contenido-principal {
             max-width: 900px;
             margin: 0 auto;
             padding: 0 15px;
         }
 
-        /* INSTRUCCIONES Y ACORDEÓN */
+        /* Instrucciones y descripción */
         .instrucciones { text-align: center; margin-bottom: 20px; }
         
         details {
@@ -148,7 +147,7 @@
         }
         details p { font-size: 14px; line-height: 1.5; color: var(--text-color); margin-top: 10px; opacity: 0.9;}
 
-        /* CAJAS DE SELECCIÓN Y CONTROLES */
+        /* Caja de selección y control */
         .caja-control {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -178,7 +177,7 @@
             margin-bottom: 20px;
         }
 
-        /* BOTÓN PRINCIPAL */
+        /* Boton principal */
         .btn-trazar {
             background-color: var(--unam-blue);
             color: white;
@@ -197,7 +196,7 @@
             border: 2px solid var(--unam-blue);
         }
 
-        /* ALERTAS DINÁMICAS */
+        /* Alertas dinamicas */
         .alert {
             border-radius: 10px;
             width: 100%;
@@ -212,7 +211,7 @@
         .alert-info { background-color: var(--alert-info-bg); color: var(--alert-info-text); border-left: 5px solid var(--alert-info-border); }
         .alert-error { background-color: var(--alert-error-bg); color: var(--alert-error-text); border-left: 5px solid var(--alert-error-border); }
 
-        /* CONTENEDOR DEL MAPA RESPONSIVO */
+        /* Contenedor del mapa responsivo */
         .map-container {
             width: 100%;
             margin-bottom: 30px;
@@ -249,7 +248,7 @@
     </style>
 </head>
 <body>
-
+    /* Encabezado institucional con logos y título */
     <header class="header-institucional">
         <div class="logos-izq">
             <a href="https://www.unam.mx/" target="_blank">
@@ -278,11 +277,20 @@
             <p>1. 📍 <b>Estás en:</b> selecciona tu ubicación actual.<br>
             2. 🎯 <b>Vas a:</b> elige tu destino.<br>
             3. Haz clic en <b>Trazar Ruta</b>.</p>
-        </div>
+        </div>x
 
         <details>
             <summary><b>¿Cómo funciona esta tecnología?</b></summary>
-            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>. Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, calculando la ruta más corta y eficiente entre los diferentes pisos del edificio.</p>
+            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>: cada salón, escalera,
+            baño o área común se representa como un <b>nodo</b>, y los pasillos que los conectan como <b>aristas</b> con un peso
+            igual a la distancia aproximada en metros entre ambos puntos.
+
+            Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, que explora todas las conexiones
+            posibles entre tu ubicación actual y tu destino, y selecciona la combinación de tramos cuya suma de
+            distancias sea la menor posible, considerando incluso cambios de piso a través de escaleras.
+
+            El mapa que ves no es una simulación: corresponde a la distribución real del edificio de la ENES Juriquilla,
+            por lo que la ruta trazada refleja el camino que efectivamente recorrerías a pie dentro del plantel.</p>
         </details>
 
         <div class="caja-control">
@@ -331,7 +339,9 @@
 
     <footer class="footer">
         Hecho en México, Universidad Nacional Autónoma de México (UNAM).<br>
-        Desarrollado por estudiantes de la Licenciatura en Tecnología, ENES Juriquilla.<br>
+        Desarrollado por estudiantes de la Licenciatura en Tecnología de la ENES Juriquilla: <br>
+        Ávila Gónzález Jimena, Macías García Mayra,
+        Pérez Rodríguez José Luis, Ramírez Conejo Christian Alexis <br>
         © 2026 Todos los derechos reservados.
     </footer>
 
@@ -348,6 +358,7 @@
             targetDestino.innerHTML += `<option value="${nodo}">${nodo}</option>`;
         });
 
+        // Función para trazar la ruta al hacer clic en el botón
         async function trazarRuta() {
             const origen = document.getElementById('origen').value;
             const destino = document.getElementById('destino').value;
@@ -368,6 +379,7 @@
             btn.innerText = '⏳ Dibujando la ruta...';
             btn.disabled = true;
 
+            // Conexión con el backend para obtener la ruta, distancia y mapa
             try {
                 const response = await fetch('/api/trazar', {
                     method: 'POST',
