@@ -21,6 +21,7 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Función para generar el grafo con las rutas y distancias entre nodos
 def generar_grafo():
     G = nx.Graph()
     rutas_ps = [('Salones de usos múltiples', 'Escaleras 1 sótano', 11), ('Escaleras 1 sótano', 'Baños 1 sótano', 5), ('Escaleras 1 sótano', 'Cafetería', 17), ('Cafetería', 'Juegos', 43), ('Juegos', 'Explanada', 3), ('Explanada', 'Escaleras 2 sótano', 12), ('Juegos', 'TIC', 5), ('Juegos', 'Deportes', 8), ('TIC', 'Intendencia de obras', 15), ('Intendencia de obras', 'Túnel de viento', 35), ('Túnel de viento', 'UIOYP', 5), ('UIOYP', 'Escaleras 3 sótano', 5), ('Escaleras 3 sótano', 'Baños 2 sótano', 5)]
@@ -35,6 +36,7 @@ def generar_grafo():
     G.add_weighted_edges_from(rutas_ps + rutas_pb + rutas_p1 + rutas_p2 + rutas_p3 + rutas_p4 + rutas_p5 + escaleras)
     return G
 
+# Coordenadas aproximadas (en metros) de cada nodo para la visualización en el mapa
 pos = {
     'Escaleras 1 sótano': (7, -0.25), 'Escaleras 1 planta baja': (7, 0.5), 'Escaleras 2 sótano': (35, 0.5), 'Escaleras 2 planta baja': (26, 1), 'Escaleras 3 sótano': (50, 0.75), 'Escaleras 3 planta baja': (50, 1.25), 'Salones de usos múltiples': (2, -0.25), 'Cafetería': (21, 0.25), 'Juegos': (25.5, 0.375), 'Deportes': (30, 0.375), 'Explanada': (27, 0), 'TIC': (24.25, 0.75), 'Intendencia de obras': (31, 0.75), 'Túnel de viento': (43, 0.75), 'UIOYP': (48, 0.5), 'Baños 1 sótano': (9, 0), 'Baños 2 sótano': (51, 0.875),
     'Auditorio': (1, 0.5), 'Entrada': (16, 0.75), 'Recepción': (20, 1), 'Baños 1 planta baja': (9, 0.625), 'Baños 2 planta baja': (25, 1.125), 'Baños 3 planta baja': (51, 1.375), 'Vitrinas': (31, 1), 'VI-PB01': (38, 1.25), 'Microondas': (36, -0.5), 'VI-PB02': (41, 1.25), 'VI-PB03': (44, 1.25), 'VI-PB04': (47, 1.25), 'Nutrición': (38, 1), 'Médico': (40, 1), 'Lactancia': (42, 1), 'Psicopedagogía': (44, 1), 'CID planta baja': (46, 1),
@@ -47,19 +49,24 @@ pos = {
 
 G = generar_grafo()
 
+# Modelo de datos para la petición de trazar ruta
 class PeticionRuta(BaseModel):
     origen: str
     destino: str
 
+# Endpoint para servir la página principal (pedir el archivo index.html)
 @app.get("/")
 def serve_home():
     return FileResponse("index.html")
 
+# Endpoint para trazar la ruta entre dos nodos y generar la imagen con la ruta destacada (tomando desde index.html la petición con el origen y destino seleccionados por el usuario)
 @app.post("/api/trazar")
 def trazar_ruta(peticion: PeticionRuta):
     try:
+        # Calcular la ruta más corta usando el algoritmo de Dijkstra
         distancia, ruta = nx.bidirectional_dijkstra(G, source=peticion.origen, target=peticion.destino, weight='weight')
         
+        # Crear la imagen del mapa y dibujar la ruta
         img = Image.open('static/foto_enes_op.png').convert('RGBA')
         capa_ruta = Image.new('RGBA', img.size, (255, 255, 255, 0))
         draw = ImageDraw.Draw(capa_ruta)
@@ -73,7 +80,7 @@ def trazar_ruta(peticion: PeticionRuta):
             px_y = int(H - (((y - abajo) / (arriba - abajo)) * H))
             return px_x, px_y
 
-        # --- VARIABLES DE TAMAÑO ---
+        # Variables de estilo para la visualización de la ruta
         grosor_linea = 6
         radio_int = 4
         grosor_borde_int = 2
@@ -84,7 +91,6 @@ def trazar_ruta(peticion: PeticionRuta):
         tamano_fuente = 24
         grosor_borde_texto = 3
         desplazamiento_texto = 20
-        # ---------------------------
 
         # Dibujar líneas de la ruta
         for u, v in zip(ruta, ruta[1:]):
@@ -118,6 +124,7 @@ def trazar_ruta(peticion: PeticionRuta):
         img_final.save(buffer, format="WEBP", quality=70) 
         img_b64 = base64.b64encode(buffer.getvalue()).decode()
 
+        # Devolver la respuesta con la distancia, el camino a seguir y la imagen codificada en base64
         return {
             "exito": True,
             "distancia": distancia,
@@ -130,8 +137,7 @@ def trazar_ruta(peticion: PeticionRuta):
     except Exception as e:
         return {"exito": False, "error": str(e)}
 
-# Agregamos esta configuración final para asegurar que Render o el servidor de la escuela
-# puedan lanzar la aplicación reconociendo el puerto de forma automática.
+# Punto de entrada para ejecutar la aplicación con Uvicorn
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
