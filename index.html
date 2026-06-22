@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Navegador ENES Juriquilla</title>
+    <link rel="icon" href="static/logo_unam_dorado.png" type="image/png">
+    
     <style>
         /* Importar fuente Roboto */
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
@@ -230,7 +232,7 @@
 
         @media (max-width: 768px) {
             .map-container {
-                height: 25vh; /* El ajuste de proporción que vimos antes */
+                height: 25vh;
                 overflow-x: auto;
                 overflow-y: hidden;
                 white-space: nowrap;
@@ -251,10 +253,10 @@
     <header class="header-institucional">
         <div class="logos-izq">
             <a href="https://www.unam.mx/" target="_blank">
-                <img class="logo-header" src="static/logo_unam_475.jpg" alt="UNAM">
+                <img class="logo-header" src="static/logo_unam_dorado_1.png" alt="UNAM">
             </a>
             <a href="#" target="_blank">
-                <img class="logo-header" src="static/logo_unam_dorado.png" alt="UNAM 475">
+                <img class="logo-header" src="static/logo_unam_475.png" alt="UNAM 475">
             </a>
         </div>
         
@@ -286,7 +288,7 @@
         <div class="caja-control">
             <label>📍 Estás en:</label>
             <select id="origen">
-                <optgroup label="⭐ --- MÁS USADOS ---">
+                <optgroup label="⭐ MÁS USADOS ">
                     <option value="Entrada" selected>Entrada</option>
                     <option value="Recepción">Recepción</option>
                     <option value="Cafetería">Cafetería</option>
@@ -294,12 +296,12 @@
                     <option value="Servicios escolares">Servicios escolares</option>
                     <option value="Baños 1 planta baja">Baños 1 planta baja</option>
                 </optgroup>
-                <optgroup label="🏢 --- ÁREAS Y AULAS ---" id="nodos-origen"></optgroup>
+                <optgroup label="🏢 ÁREAS Y AULAS " id="nodos-origen"></optgroup>
             </select>
 
             <label>🎯 Vas a:</label>
             <select id="destino">
-                <optgroup label="⭐ --- MÁS USADOS ---">
+                <optgroup label="⭐ MÁS USADOS ">
                     <option value="Entrada">Entrada</option>
                     <option value="Recepción">Recepción</option>
                     <option value="Cafetería">Cafetería</option>
@@ -307,8 +309,7 @@
                     <option value="Servicios escolares">Servicios escolares</option>
                     <option value="Baños 1 planta baja">Baños 1 planta baja</option>
                 </optgroup>
-                <optgroup label="🏢 --- ÁREAS Y AULAS ---" id="nodos-destino"></optgroup>
-                <optgroup label="👨‍🏫 --- DOCENTES ---" id="nodos-docentes"></optgroup>
+                <optgroup label="🏢 ÁREAS Y AULAS " id="nodos-destino"></optgroup>
             </select>
 
             <button onclick="trazarRuta()" class="btn-trazar" id="btn-trazar">Trazar Ruta</button>
@@ -338,21 +339,13 @@
         // Lista completa de áreas
         const nodosEdificio = ['Ajedrez', 'Baños 1 piso 1', 'Baños 1 piso 2', 'Baños 1 piso 3', 'Baños 1 piso 4', 'Baños 1 piso 5', 'Baños 1 sótano', 'Baños 2 piso 1', 'Baños 2 piso 2', 'Baños 2 piso 3', 'Baños 2 piso 4', 'Baños 2 piso 5', 'Baños 2 planta baja', 'Baños 2 sótano', 'Baños 3 piso 1', 'Baños 3 piso 2', 'Baños 3 piso 3', 'Baños 3 piso 4', 'Baños 3 planta baja', 'CID piso 1', 'CID piso 3', 'CID piso 4', 'CID planta baja', 'Deportes', 'Dirección', 'Escaleras 1 piso 1', 'Escaleras 1 piso 2', 'Escaleras 1 piso 3', 'Escaleras 1 piso 4', 'Escaleras 1 piso 5', 'Escaleras 1 planta baja', 'Escaleras 1 sótano', 'Escaleras 2 piso 1', 'Escaleras 2 piso 2', 'Escaleras 2 piso 3', 'Escaleras 2 piso 4', 'Escaleras 2 piso 5', 'Escaleras 2 planta baja', 'Escaleras 2 sótano', 'Escaleras 3 piso 1', 'Escaleras 3 piso 2', 'Escaleras 3 piso 3', 'Escaleras 3 piso 4', 'Escaleras 3 piso 5', 'Escaleras 3 planta baja', 'Escaleras 3 sótano', 'Explanada', 'Gym al aire libre', 'III-201', 'III-202', 'III-301', 'III-302', 'III-303', 'III-304', 'IV-101', 'IV-102', 'IV-103', 'IV-301', 'IV-302', 'IV-303', 'IV-304', 'IV-305', 'Intendencia de obras', 'Jardineras', 'Juegos', 'Lactancia', 'Microondas', 'Médico', 'Nutrición', 'Paneles solares', 'Psicopedagogía', 'Sala de juntas', 'Salones de usos múltiples', 'Secretaría académica', 'Secretaría administrativa', 'Secretaría de educación y vinculación', 'Secretaría general', 'TIC', 'Túnel de viento', 'UIOYP', 'V-101', 'V-102', 'V-301', 'V-302', 'V-303', 'V-304', 'V-401', 'V-402', 'V-403', 'V-404', 'VI-201', 'VI-202', 'VI-203', 'VI-204', 'VI-301', 'VI-302', 'VI-303', 'VI-304', 'VI-401', 'VI-402', 'VI-403', 'VI-404', 'VI-PB01', 'VI-PB02', 'VI-PB03', 'VI-PB04', 'Vitrinas'];
 
-        // Lista de docentes
-        const directorioProfes = ["Dr. Abdiel Hernandez", "Dr. Adolfo V. Magaldi", "Dr. Alberto Padro", "Dr. Dante Ruiz Robles", "Dr. David O. Perez", "Dr. Heriberto Ruiz Tafoya", "Dr. Hugo Harlan Mejia Madrid", "Dr. Javier Sanchez Lopez", "Dr. Jesus A. Franco", "Dr. Jesus Arturo Muñiz Jauregui", "Dr. Jesus Emmanuel Solis Perez", "Dr. Jose Carlos Ramirez Sanchez", "Dr. Mario Santana Cibrian", "Dr. Octavio Diaz", "Dr. Quetzalcoatl Cruz", "Dr. Raide A. Gonzalez", "Dr. Raul Iturralde", "Dr. Ulises Olivares", "Dra. Ana Paola Galicia Gallardo", "Dra. Criseida Ruiz", "Dra. Diana Cristina Martinez Casillas", "Dra. Elisa Ventura", "Dra. Iliana del Rocio", "Dra. Maria Guadalupe Garcia Gomar", "Dra. Marie C. Bedos", "Dra. Marisol de la Mora", "Dra. Martha Cecilia Herrera Garcia", "Dra. Monica A. Lopez", "Dra. Rosario Vazquez"];
-
         const targetOrigen = document.getElementById('nodos-origen');
         const targetDestino = document.getElementById('nodos-destino');
-        const targetDocentes = document.getElementById('nodos-docentes');
 
         // Llenar listas dinámicamente
         nodosEdificio.forEach(nodo => {
             targetOrigen.innerHTML += `<option value="${nodo}">${nodo}</option>`;
             targetDestino.innerHTML += `<option value="${nodo}">${nodo}</option>`;
-        });
-
-        directorioProfes.forEach(profe => {
-            targetDocentes.innerHTML += `<option value="${profe}">${profe}</option>`;
         });
 
         async function trazarRuta() {
