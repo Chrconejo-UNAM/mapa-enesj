@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Navegador ENES Juriquilla</title>
+    <style>
+        /* Importar fuente Roboto */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        /* 1. PALETA BASE (Modo Claro por defecto) */
+        :root {
+            /* Colores Institucionales Fijos */
+            --unam-blue: #002B7A;
+            --unam-gold: #BB8800;
+
+            /* Fondo y Textos Generales */
+            --bg-color: #F8F9FA;
+            --text-color: #212529;
+            --card-bg: #FFFFFF;
+            --border-color: #DEE2E6;
+
+            /* Menús Desplegables (Selects) */
+            --input-bg: #FFFFFF;
+            --input-border: #CED4DA;
+            --input-text: #495057;
+
+            /* Alertas Modo Claro */
+            --alert-success-bg: #D1E7DD;
+            --alert-success-text: #0F5132;
+            --alert-success-border: #BADBCC;
+
+            --alert-info-bg: #CFF4FC;
+            --alert-info-text: #055160;
+            --alert-info-border: #B6EFFB;
+
+            --alert-error-bg: #F8D7DA;
+            --alert-error-text: #842029;
+            --alert-error-border: #F5C2C7;
+        }
+
+        /* 2. PALETA MODO OSCURO (Se activa sola si el celular está en oscuro) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #050403; /* Tu --unam-black original */
+                --text-color: #F8F9FA;
+                --card-bg: #111111;
+                --border-color: #333333;
+
+                --input-bg: #222222;
+                --input-border: #555555;
+                --input-text: #FFFFFF;
+
+                /* Alertas Modo Oscuro (las que ya tenías) */
+                --alert-success-bg: #152C20;
+                --alert-success-text: #57E08B;
+                --alert-success-border: #1B4332;
+
+                --alert-info-bg: #13243A;
+                --alert-info-text: #66A3EB;
+                --alert-info-border: #1C3B5E;
+
+                --alert-error-bg: #3B161B;
+                --alert-error-text: #FF8A8F;
+                --alert-error-border: #641220;
+            }
+        }
+
+        /* --- APLICACIÓN DE ESTILOS BASE --- */
+        body {
+            font-family: 'Roboto', Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave al cambiar de modo */
+        }
+
+        /* ENCABEZADO Y FOOTER (Siempre mantienen colores institucionales) */
+        .header-institucional, .footer {
+            background-color: var(--unam-blue);
+            color: white;
+            width: 100%;
+            border-bottom: 4px solid var(--unam-gold);
+            box-sizing: border-box;
+        }
+        
+        .header-institucional {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+            border-top: 4px solid var(--unam-gold);
+            border-bottom: none;
+            margin-top: 40px;
+        }
+
+        .logos-izq, .logos-der { display: flex; align-items: center; gap: 10px; width: 30%; }
+        .logos-der { justify-content: flex-end; }
+        
+        .header-titulo {
+            text-align: center;
+            font-weight: bold;
+            font-size: clamp(16px, 3.5vw, 35px);
+            line-height: 1.2;
+            width: 40%;
+        }
+
+        .logo-header {
+            max-height: 70px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            .logo-header { max-height: 45px; }
+            .header-institucional { padding: 10px 5px; }
+            .logos-izq, .logos-der { gap: 5px; }
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        .contenido-principal {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* INSTRUCCIONES Y ACORDEÓN */
+        .instrucciones { text-align: center; margin-bottom: 20px; }
+        
+        details {
+            background-color: var(--card-bg);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--unam-gold);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        details p { font-size: 14px; line-height: 1.5; color: var(--text-color); margin-top: 10px; opacity: 0.9;}
+
+        /* CAJAS DE SELECCIÓN Y CONTROLES */
+        .caja-control {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            font-size: 16px;
+            font-family: inherit;
+            margin-bottom: 20px;
+        }
+
+        /* BOTÓN PRINCIPAL */
+        .btn-trazar {
+            background-color: var(--unam-blue);
+            color: white;
+            border: 2px solid var(--unam-gold);
+            border-radius: 8px;
+            width: 100%;
+            height: 3em;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-trazar:hover {
+            background-color: var(--unam-gold);
+            color: var(--unam-blue);
+            border: 2px solid var(--unam-blue);
+        }
+
+        /* ALERTAS DINÁMICAS */
+        .alert {
+            border-radius: 10px;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: none;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .alert-success { background-color: var(--alert-success-bg); color: var(--alert-success-text); border-left: 5px solid var(--alert-success-border); }
+        .alert-info { background-color: var(--alert-info-bg); color: var(--alert-info-text); border-left: 5px solid var(--alert-info-border); }
+        .alert-error { background-color: var(--alert-error-bg); color: var(--alert-error-text); border-left: 5px solid var(--alert-error-border); }
+
+        /* CONTENEDOR DEL MAPA RESPONSIVO */
+        .map-container {
+            width: 100%;
+            margin-bottom: 30px;
+            text-align: center;
+            display: block;
+        }
+        
+        .map-container img {
+            width: 100%; 
+            height: auto;
+            border-radius: 15px;
+            border: 2px solid var(--unam-gold);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.4);
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .map-container {
+                height: 25vh; /* El ajuste de proporción que vimos antes */
+                overflow-x: auto;
+                overflow-y: hidden;
+                white-space: nowrap;
+                padding: 10px 0;
+                -webkit-overflow-scrolling: touch;
+            }
+            .map-container img {
+                height: 100%; 
+                width: auto;  
+                max-width: none; 
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-institucional">
+        <div class="logos-izq">
+            <a href="https://www.unam.mx/" target="_blank">
+                <img class="logo-header" src="static/logo_unam_475.jpg" alt="UNAM">
+            </a>
+            <a href="#" target="_blank">
+                <img class="logo-header" src="static/logo_unam_dorado.png" alt="UNAM 475">
+            </a>
+        </div>
+        
+        <div class="header-titulo">
+            Sistema de Navegación<br>ENES Juriquilla
+        </div>
+        
+        <div class="logos-der">
+            <a href="https://www.enesjuriquilla.unam.mx/" target="_blank">
+                <img class="logo-header" src="static/logo_enes_dorado.png" alt="ENES">
+            </a>
+        </div>
+    </header>
+
+    <div class="contenido-principal">
+        
+        <div class="instrucciones">
+            <h3>🗺️ ¿Cómo usar el navegador?</h3>
+            <p>1. 📍 <b>Estás en:</b> selecciona tu ubicación actual.<br>
+            2. 🎯 <b>Vas a:</b> elige tu destino.<br>
+            3. Haz clic en <b>Trazar Ruta</b>.</p>
+        </div>
+
+        <details>
+            <summary><b>¿Cómo funciona esta tecnología?</b></summary>
+            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>. Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, calculando la ruta más corta y eficiente entre los diferentes pisos del edificio.</p>
+        </details>
+
+        <div class="caja-control">
+            <label>📍 Estás en:</label>
+            <select id="origen">
+                <optgroup label="⭐ --- MÁS USADOS ---">
+                    <option value="Entrada" selected>Entrada</option>
+                    <option value="Recepción">Recepción</option>
+                    <option value="Cafetería">Cafetería</option>
+                    <option value="Auditorio">Auditorio</option>
+                    <option value="Servicios escolares">Servicios escolares</option>
+                    <option value="Baños 1 planta baja">Baños 1 planta baja</option>
+                </optgroup>
+                <optgroup label="🏢 --- ÁREAS Y AULAS ---" id="nodos-origen"></optgroup>
+            </select>
+
+            <label>🎯 Vas a:</label>
+            <select id="destino">
+                <optgroup label="⭐ --- MÁS USADOS ---">
+                    <option value="Entrada">Entrada</option>
+                    <option value="Recepción">Recepción</option>
+                    <option value="Cafetería">Cafetería</option>
+                    <option value="Auditorio">Auditorio</option>
+                    <option value="Servicios escolares">Servicios escolares</option>
+                    <option value="Baños 1 planta baja">Baños 1 planta baja</option>
+                </optgroup>
+                <optgroup label="🏢 --- ÁREAS Y AULAS ---" id="nodos-destino"></optgroup>
+                <optgroup label="👨‍🏫 --- DOCENTES ---" id="nodos-docentes"></optgroup>
+            </select>
+
+            <button onclick="trazarRuta()" class="btn-trazar" id="btn-trazar">Trazar Ruta</button>
+        </div>
+
+        <div id="alerta-error" class="alert alert-error"></div>
+        <div id="alerta-distancia" class="alert alert-success"></div>
+        <div id="alerta-camino" class="alert alert-info"></div>
+
+        <div id="alerta-info-inicial" class="alert alert-info" style="display: block;">
+            👆 Selecciona tu ubicación y destino arriba para trazar la ruta.
+        </div>
+
+        <div class="map-container" id="map-container">
+            <img id="mapa-img" src="static/mapa_guia.png" alt="Mapa">
+        </div>
+
+    </div>
+
+    <footer class="footer">
+        Hecho en México, Universidad Nacional Autónoma de México (UNAM).<br>
+        Desarrollado por estudiantes de la Licenciatura en Tecnología, ENES Juriquilla.<br>
+        © 2026 Todos los derechos reservados.
+    </footer>
+
+    <script>
+        // Lista completa de áreas
+        const nodosEdificio = ['Ajedrez', 'Baños 1 piso 1', 'Baños 1 piso 2', 'Baños 1 piso 3', 'Baños 1 piso 4', 'Baños 1 piso 5', 'Baños 1 sótano', 'Baños 2 piso 1', 'Baños 2 piso 2', 'Baños 2 piso 3', 'Baños 2 piso 4', 'Baños 2 piso 5', 'Baños 2 planta baja', 'Baños 2 sótano', 'Baños 3 piso 1', 'Baños 3 piso 2', 'Baños 3 piso 3', 'Baños 3 piso 4', 'Baños 3 planta baja', 'CID piso 1', 'CID piso 3', 'CID piso 4', 'CID planta baja', 'Deportes', 'Dirección', 'Escaleras 1 piso 1', 'Escaleras 1 piso 2', 'Escaleras 1 piso 3', 'Escaleras 1 piso 4', 'Escaleras 1 piso 5', 'Escaleras 1 planta baja', 'Escaleras 1 sótano', 'Escaleras 2 piso 1', 'Escaleras 2 piso 2', 'Escaleras 2 piso 3', 'Escaleras 2 piso 4', 'Escaleras 2 piso 5', 'Escaleras 2 planta baja', 'Escaleras 2 sótano', 'Escaleras 3 piso 1', 'Escaleras 3 piso 2', 'Escaleras 3 piso 3', 'Escaleras 3 piso 4', 'Escaleras 3 piso 5', 'Escaleras 3 planta baja', 'Escaleras 3 sótano', 'Explanada', 'Gym al aire libre', 'III-201', 'III-202', 'III-301', 'III-302', 'III-303', 'III-304', 'IV-101', 'IV-102', 'IV-103', 'IV-301', 'IV-302', 'IV-303', 'IV-304', 'IV-305', 'Intendencia de obras', 'Jardineras', 'Juegos', 'Lactancia', 'Microondas', 'Médico', 'Nutrición', 'Paneles solares', 'Psicopedagogía', 'Sala de juntas', 'Salones de usos múltiples', 'Secretaría académica', 'Secretaría administrativa', 'Secretaría de educación y vinculación', 'Secretaría general', 'TIC', 'Túnel de viento', 'UIOYP', 'V-101', 'V-102', 'V-301', 'V-302', 'V-303', 'V-304', 'V-401', 'V-402', 'V-403', 'V-404', 'VI-201', 'VI-202', 'VI-203', 'VI-204', 'VI-301', 'VI-302', 'VI-303', 'VI-304', 'VI-401', 'VI-402', 'VI-403', 'VI-404', 'VI-PB01', 'VI-PB02', 'VI-PB03', 'VI-PB04', 'Vitrinas'];
+
+        // Lista de docentes
+        const directorioProfes = ["Dr. Abdiel Hernandez", "Dr. Adolfo V. Magaldi", "Dr. Alberto Padro", "Dr. Dante Ruiz Robles", "Dr. David O. Perez", "Dr. Heriberto Ruiz Tafoya", "Dr. Hugo Harlan Mejia Madrid", "Dr. Javier Sanchez Lopez", "Dr. Jesus A. Franco", "Dr. Jesus Arturo Muñiz Jauregui", "Dr. Jesus Emmanuel Solis Perez", "Dr. Jose Carlos Ramirez Sanchez", "Dr. Mario Santana Cibrian", "Dr. Octavio Diaz", "Dr. Quetzalcoatl Cruz", "Dr. Raide A. Gonzalez", "Dr. Raul Iturralde", "Dr. Ulises Olivares", "Dra. Ana Paola Galicia Gallardo", "Dra. Criseida Ruiz", "Dra. Diana Cristina Martinez Casillas", "Dra. Elisa Ventura", "Dra. Iliana del Rocio", "Dra. Maria Guadalupe Garcia Gomar", "Dra. Marie C. Bedos", "Dra. Marisol de la Mora", "Dra. Martha Cecilia Herrera Garcia", "Dra. Monica A. Lopez", "Dra. Rosario Vazquez"];
+
+        const targetOrigen = document.getElementById('nodos-origen');
+        const targetDestino = document.getElementById('nodos-destino');
+        const targetDocentes = document.getElementById('nodos-docentes');
+
+        // Llenar listas dinámicamente
+        nodosEdificio.forEach(nodo => {
+            targetOrigen.innerHTML += `<option value="${nodo}">${nodo}</option>`;
+            targetDestino.innerHTML += `<option value="${nodo}">${nodo}</option>`;
+        });
+
+        directorioProfes.forEach(profe => {
+            targetDocentes.innerHTML += `<option value="${profe}">${profe}</option>`;
+        });
+
+        async function trazarRuta() {
+            const origen = document.getElementById('origen').value;
+            const destino = document.getElementById('destino').value;
+            const btn = document.getElementById('btn-trazar');
+            
+            // Ocultar todas las alertas antes de iniciar
+            document.getElementById('alerta-error').style.display = 'none';
+            document.getElementById('alerta-distancia').style.display = 'none';
+            document.getElementById('alerta-camino').style.display = 'none';
+            document.getElementById('alerta-info-inicial').style.display = 'none';
+
+            if (origen === destino) {
+                document.getElementById('alerta-info-inicial').style.display = 'block';
+                document.getElementById('alerta-info-inicial').innerHTML = `📍🎯 ¡Ya estás aquí!: ${origen}`;
+                return;
+            }
+
+            btn.innerText = '⏳ Dibujando la ruta...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/trazar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ origen, destino })
+                });
+
+                const data = await response.json();
+
+                if (data.exito) {
+                    document.getElementById('alerta-distancia').style.display = 'block';
+                    document.getElementById('alerta-distancia').innerHTML = `✅ ¡Ruta Encontrada! Distancia aproximada: ${data.distancia} metros`;
+                    
+                    document.getElementById('alerta-camino').style.display = 'block';
+                    document.getElementById('alerta-camino').innerHTML = `🧭 <b>Camino a seguir:</b> ${data.camino}`;
+
+                    document.getElementById('mapa-img').src = data.imagen;
+                } else {
+                    document.getElementById('alerta-error').style.display = 'block';
+                    document.getElementById('alerta-error').innerText = `❌ ${data.error}`;
+                }
+            } catch (error) {
+                document.getElementById('alerta-error').style.display = 'block';
+                document.getElementById('alerta-error').innerText = '❌ Error de conexión con el servidor.';
+            }
+
+            btn.innerText = 'Trazar Ruta';
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
