@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,75 +9,57 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-        /* Paleta base (modo claro por defecto) */
         :root {
-            /* Colores institucionales fijos */
             --unam-blue: #002B7A;
             --unam-gold: #BB8800;
-
-            /* Fondo y textos generales */
             --bg-color: #F8F9FA;
             --text-color: #212529;
             --card-bg: #FFFFFF;
             --border-color: #DEE2E6;
-
-            /* Menús desplegables (selects) */
             --input-bg: #FFFFFF;
             --input-border: #CED4DA;
             --input-text: #495057;
-
-            /* Alertas modo claro */
             --alert-success-bg: #D1E7DD;
             --alert-success-text: #0F5132;
             --alert-success-border: #BADBCC;
-
             --alert-info-bg: #CFF4FC;
             --alert-info-text: #055160;
             --alert-info-border: #B6EFFB;
-
             --alert-error-bg: #F8D7DA;
             --alert-error-text: #842029;
             --alert-error-border: #F5C2C7;
         }
 
-        /* Paleta modo oscuro */
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #050403; /* --unam-black original */
+                --bg-color: #050403;
                 --text-color: #F8F9FA;
                 --card-bg: #111111;
                 --border-color: #333333;
-
                 --input-bg: #222222;
                 --input-border: #555555;
                 --input-text: #FFFFFF;
-
-                /* Alertas modo oscuro */
                 --alert-success-bg: #152C20;
                 --alert-success-text: #57E08B;
                 --alert-success-border: #1B4332;
-
                 --alert-info-bg: #13243A;
                 --alert-info-text: #66A3EB;
                 --alert-info-border: #1C3B5E;
-
                 --alert-error-bg: #3B161B;
                 --alert-error-text: #FF8A8F;
                 --alert-error-border: #641220;
             }
         }
 
-        /* Aplicación de estilos base */
         body {
             font-family: 'Roboto', Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave al cambiar de modo */
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Encabezado y pie de página (con colores institucionales) */
         .header-institucional, .footer {
             background-color: var(--unam-blue);
             color: white;
@@ -126,14 +108,12 @@
             .logos-izq, .logos-der { gap: 5px; }
         }
 
-        /* Contenido principal */
         .contenido-principal {
             max-width: 900px;
             margin: 0 auto;
             padding: 0 15px;
         }
 
-        /* Instrucciones y descripción */
         .instrucciones { text-align: center; margin-bottom: 20px; }
         
         details {
@@ -147,7 +127,6 @@
         }
         details p { font-size: 14px; line-height: 1.5; color: var(--text-color); margin-top: 10px; opacity: 0.9;}
 
-        /* Caja de selección y control */
         .caja-control {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -177,7 +156,6 @@
             margin-bottom: 20px;
         }
 
-        /* Boton principal */
         .btn-trazar {
             background-color: var(--unam-blue);
             color: white;
@@ -196,7 +174,6 @@
             border: 2px solid var(--unam-blue);
         }
 
-        /* Alertas dinamicas */
         .alert {
             border-radius: 10px;
             width: 100%;
@@ -211,7 +188,6 @@
         .alert-info { background-color: var(--alert-info-bg); color: var(--alert-info-text); border-left: 5px solid var(--alert-info-border); }
         .alert-error { background-color: var(--alert-error-bg); color: var(--alert-error-text); border-left: 5px solid var(--alert-error-border); }
 
-        /* Contenedor del mapa responsivo */
         .map-container {
             width: 100%;
             margin-bottom: 30px;
@@ -248,6 +224,7 @@
     </style>
 </head>
 <body>
+
     <header class="header-institucional">
         <div class="logos-izq">
             <a href="https://www.unam.mx/" target="_blank">
@@ -280,16 +257,7 @@
 
         <details>
             <summary><b>¿Cómo funciona esta tecnología?</b></summary>
-            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>: cada salón, escalera,
-            baño o área común se representa como un <b>nodo</b>, y los pasillos que los conectan como <b>aristas</b> con un peso
-            igual a la distancia aproximada en metros entre ambos puntos.<br>
-
-            Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, que explora todas las conexiones
-            posibles entre tu ubicación actual y tu destino, y selecciona la combinación de tramos cuya suma de
-            distancias sea la menor posible, considerando incluso cambios de piso a través de escaleras.<br>
-
-            El mapa que ves no es una simulación: corresponde a la distribución real del edificio de la ENES Juriquilla,
-            por lo que la ruta trazada refleja el camino que efectivamente recorrerías a pie dentro del plantel.</p>
+            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>. Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, calculando la ruta más corta y eficiente entre los diferentes pisos del edificio.</p>
         </details>
 
         <div class="caja-control">
@@ -301,7 +269,7 @@
                     <option value="Cafetería">Cafetería</option>
                     <option value="Auditorio">Auditorio</option>
                     <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Baños 1 planta baja">Baños 1 planta baja</option>
+                    <option value="Tics">Tics</option>
                 </optgroup>
                 <optgroup label="🏢 ÁREAS Y AULAS " id="nodos-origen"></optgroup>
             </select>
@@ -314,7 +282,7 @@
                     <option value="Cafetería">Cafetería</option>
                     <option value="Auditorio">Auditorio</option>
                     <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Baños 1 planta baja">Baños 1 planta baja</option>
+                    <option value="Tics">Tics</option>
                 </optgroup>
                 <optgroup label="🏢 ÁREAS Y AULAS " id="nodos-destino"></optgroup>
             </select>
@@ -338,15 +306,27 @@
 
     <footer class="footer">
         Hecho en México, Universidad Nacional Autónoma de México (UNAM).<br>
-        Desarrollado por estudiantes de la Licenciatura en Tecnología de la ENES Juriquilla: <br>
-        Ávila Gónzález Jimena, Macías García Mayra,
-        Pérez Rodríguez José Luis, Ramírez Conejo Christian Alexis <br>
+        Desarrollado por estudiantes de la Licenciatura en Tecnología, ENES Juriquilla.<br>
         © 2026 Todos los derechos reservados.
     </footer>
 
     <script>
-        // Lista completa de áreas
-        const nodosEdificio = ['Ajedrez', 'Baños 1 piso 1', 'Baños 1 piso 2', 'Baños 1 piso 3', 'Baños 1 piso 4', 'Baños 1 piso 5', 'Baños 1 sótano', 'Baños 2 piso 1', 'Baños 2 piso 2', 'Baños 2 piso 3', 'Baños 2 piso 4', 'Baños 2 piso 5', 'Baños 2 planta baja', 'Baños 2 sótano', 'Baños 3 piso 1', 'Baños 3 piso 2', 'Baños 3 piso 3', 'Baños 3 piso 4', 'Baños 3 planta baja', 'CID piso 1', 'CID piso 3', 'CID piso 4', 'CID planta baja', 'Deportes', 'Dirección', 'Escaleras 1 piso 1', 'Escaleras 1 piso 2', 'Escaleras 1 piso 3', 'Escaleras 1 piso 4', 'Escaleras 1 piso 5', 'Escaleras 1 planta baja', 'Escaleras 1 sótano', 'Escaleras 2 piso 1', 'Escaleras 2 piso 2', 'Escaleras 2 piso 3', 'Escaleras 2 piso 4', 'Escaleras 2 piso 5', 'Escaleras 2 planta baja', 'Escaleras 2 sótano', 'Escaleras 3 piso 1', 'Escaleras 3 piso 2', 'Escaleras 3 piso 3', 'Escaleras 3 piso 4', 'Escaleras 3 piso 5', 'Escaleras 3 planta baja', 'Escaleras 3 sótano', 'Explanada', 'Gym al aire libre', 'III-201', 'III-202', 'III-301', 'III-302', 'III-303', 'III-304', 'IV-101', 'IV-102', 'IV-103', 'IV-301', 'IV-302', 'IV-303', 'IV-304', 'IV-305', 'Intendencia de obras', 'Jardineras', 'Juegos', 'Lactancia', 'Microondas', 'Médico', 'Nutrición', 'Paneles solares', 'Psicopedagogía', 'Sala de juntas', 'Salones de usos múltiples', 'Secretaría académica', 'Secretaría administrativa', 'Secretaría de educación y vinculación', 'Secretaría general', 'TIC', 'Túnel de viento', 'UIOYP', 'V-101', 'V-102', 'V-301', 'V-302', 'V-303', 'V-304', 'V-401', 'V-402', 'V-403', 'V-404', 'VI-201', 'VI-202', 'VI-203', 'VI-204', 'VI-301', 'VI-302', 'VI-303', 'VI-304', 'VI-401', 'VI-402', 'VI-403', 'VI-404', 'VI-PB01', 'VI-PB02', 'VI-PB03', 'VI-PB04', 'Vitrinas'];
+        // ¡LISTA ACTUALIZADA! Solo áreas útiles (sin escaleras ni baños), incluye nuevos nodos.
+        const nodosEdificio = [
+            'Ajedrez', 'Auditorio', 'Cafetería', 'Canchas', 'CID piso 1', 'CID piso 3', 'CID piso 4', 
+            'CID planta baja', 'Deportes', 'Dirección', 'Entrada', 'Entrada estacionamiento', 'Explanada', 
+            'Gym al aire libre', 'III-201', 'III-202', 'III-301', 'III-302', 'III-303', 'III-304', 
+            'Intendencia de obras', 'IV-101', 'IV-102', 'IV-103', 'IV-301', 'IV-302', 'IV-303', 'IV-304', 
+            'IV-305', 'Jardineras', 'Juegos', 'Lactancia', 'Médico', 'Microondas', 'Mini circuito', 
+            'Nutrición', 'Paneles solares', 'Psicología', 'Recepción', 'Sala de juntas', 
+            'Salones de usos múltiples', 'Secretaría académica', 'Secretaría administrativa', 
+            'Secretaría de educación y vinculación', 'Secretaría general', 'Servicios escolares', 'Tics', 
+            'Túnel de viento', 'Unidad de investigación de ortesis y prótesis', 'V-101', 'V-102', 'V-301', 
+            'V-302', 'V-303', 'V-304', 'V-401', 'V-402', 'V-403', 'V-404', 'VI-201', 'VI-202', 'VI-203', 
+            'VI-204', 'VI-301', 'VI-302', 'VI-303', 'VI-304', 'VI-401', 'VI-402', 'VI-403', 'VI-404', 
+            'VI-PB01', 'VI-PB02', 'VI-PB03', 'VI-PB04', 'Vitrinas', 'Zona de docentes 1', 'Zona de docentes 2', 
+            'Zona de docentes 3', 'Zona de docentes 4', 'Zona de docentes 5'
+        ];
 
         const targetOrigen = document.getElementById('nodos-origen');
         const targetDestino = document.getElementById('nodos-destino');
@@ -357,7 +337,6 @@
             targetDestino.innerHTML += `<option value="${nodo}">${nodo}</option>`;
         });
 
-        // Función para trazar la ruta al hacer clic en el botón
         async function trazarRuta() {
             const origen = document.getElementById('origen').value;
             const destino = document.getElementById('destino').value;
@@ -378,7 +357,6 @@
             btn.innerText = '⏳ Dibujando la ruta...';
             btn.disabled = true;
 
-            // Conexión con el backend para obtener la ruta, distancia y mapa
             try {
                 const response = await fetch('/api/trazar', {
                     method: 'POST',
