@@ -21,6 +21,7 @@ app.add_middleware(
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Generar el grafo de la ENESJ
 def generar_grafo():
     G = nx.Graph()
     rutas_ps = [('Salones de usos múltiples', 'Escaleras 1 sótano', 11), ('Escaleras 1 sótano', 'Baños 1 sótano', 5), ('Escaleras 1 sótano', 'Cafetería', 17), ('Cafetería', 'Juegos', 43), ('Juegos', 'Explanada', 3), ('Explanada', 'Escaleras 2 sótano', 12), ('Juegos', 'Tics', 5), ('Juegos', 'Deportes', 8), ('Tics', 'Intendencia de obras', 15), ('Intendencia de obras', 'Túnel de viento', 35), ('Unidad de investigación de ortesis y prótesis', 'Escaleras 3 sótano', 5), ('Escaleras 3 sótano', 'Baños 2 sótano', 5)]
@@ -35,6 +36,7 @@ def generar_grafo():
     G.add_weighted_edges_from(rutas_ps + rutas_pb + rutas_p1 + rutas_p2 + rutas_p3 + rutas_p4 + rutas_p5 + escaleras)
     return G
 
+# Posiciones de los nodos en el mapa (x, y)
 pos = {
     'Escaleras 1 sótano': (7, -0.25), 'Escaleras 1 planta baja': (7, 0.5),
     'Escaleras 2 sótano': (35, 0.75), 'Escaleras 2 planta baja': (26, 1),
@@ -125,6 +127,7 @@ class PeticionRuta(BaseModel):
 def serve_home():
     return FileResponse("index.html")
 
+# Trazar la ruta entre dos puntos y generar la imagen con la ruta trazada
 @app.post("/api/trazar")
 def trazar_ruta(peticion: PeticionRuta):
     try:
@@ -133,7 +136,7 @@ def trazar_ruta(peticion: PeticionRuta):
         img = Image.open('static/foto_enes_op.png').convert('RGBA')
         W, H = img.size
         
-        # --- SUPERSAMPLING (Renderizar a 3x para bordes ultra suaves) ---
+        # Aumentar la resolución de la capa de dibujo para mejorar la calidad de las líneas y el texto
         factor = 3
         capa_ruta = Image.new('RGBA', (W * factor, H * factor), (255, 255, 255, 0))
         draw = ImageDraw.Draw(capa_ruta)
@@ -145,7 +148,7 @@ def trazar_ruta(peticion: PeticionRuta):
             px_y = int(H - (((y - abajo) / (arriba - abajo)) * H)) * factor
             return px_x, px_y
 
-        # --- AJUSTES ESTILO STREAMLIT (TAMAÑOS MÁS GRANDES) ---
+        # Ajustar los parámetros de dibujo según el factor
         grosor_linea = 10 * factor        
         radio_int = 7 * factor            
         grosor_borde_int = 2 * factor     
@@ -160,24 +163,23 @@ def trazar_ruta(peticion: PeticionRuta):
         pad_y = 5 * factor                
         radio_caja = 8 * factor            
 
-        # --- COLORES EXACTOS DE STREAMLIT ---
         color_linea = "#D4A106"
         color_inicio = "#002B5C"
         color_destino = "#D4A106"
         fondo_texto_transparente = (0, 43, 92, 170) 
 
-        # 1. Dibujar líneas de la ruta
+        # Dibujar líneas de la ruta
         for u, v in zip(ruta, ruta[1:]):
             x1, y1 = a_pixeles_escalado(pos[u][0], pos[u][1])
             x2, y2 = a_pixeles_escalado(pos[v][0], pos[v][1])
             draw.line([(x1, y1), (x2, y2)], fill=color_linea, width=grosor_linea)
 
-        # 2. Dibujar nodos intermedios 
+        # Dibujar nodos intermedios 
         for nodo in ruta[1:-1]:
             px, py = a_pixeles_escalado(pos[nodo][0], pos[nodo][1])
             draw.ellipse([(px - radio_int, py - radio_int), (px + radio_int, py + radio_int)], 
                          fill="white", outline=color_inicio, width=grosor_borde_int)
-
+            
         try:
             fuentes_bonitas = ["arialbd.ttf", "DejaVuSans-Bold.ttf", "arial.ttf"]
             for font_name in fuentes_bonitas:
@@ -191,30 +193,54 @@ def trazar_ruta(peticion: PeticionRuta):
         except:
             fuente = ImageFont.load_default()
 
-        def dibujar_etiqueta_inferior(texto, px, py):
-            txt_y = py + desplazamiento_texto 
-            bbox = draw.textbbox((px, txt_y), texto, font=fuente, anchor="mt")
+        # Funcion para dibujar etiquetas de manera inteligente, evitando que se superpongan con la ruta
+        def dibujar_etiqueta_inteligente(texto, px, py, px_adyacente, py_adyacente):
+            # Si el nodo adyacente está por encima del nodo actual, dibujar la etiqueta hacia abajo; de lo contrario, dibujarla hacia arriba
+            if py_adyacente > py:
+                txt_y = py - desplazamiento_texto 
+                anchor = "mb" # mb = Middle-Bottom (dibuja la etiqueta hacia arriba)
+            else:
+                txt_y = py + desplazamiento_texto 
+                anchor = "mt" # mt = Middle-Top (dibuja la etiqueta hacia abajo, por defecto)
+                
+            bbox = draw.textbbox((px, txt_y), texto, font=fuente, anchor=anchor)
             draw.rounded_rectangle(
                 [bbox[0] - pad_x, bbox[1] - pad_y, bbox[2] + pad_x, bbox[3] + pad_y],
                 radius=radio_caja, fill=fondo_texto_transparente
             )
-            draw.text((px, txt_y), texto, fill="white", font=fuente, anchor="mt")
+            draw.text((px, txt_y), texto, fill="white", font=fuente, anchor=anchor)
 
-        # 3. Dibujar Origen
+        # Dibujar Origen
         px_orig, py_orig = a_pixeles_escalado(pos[peticion.origen][0], pos[peticion.origen][1])
         draw.ellipse([(px_orig - radio_ext, py_orig - radio_ext), (px_orig + radio_ext, py_orig + radio_ext)], 
                      fill=color_inicio, outline="white", width=grosor_borde_ext)
-        dibujar_etiqueta_inferior(f"Inicio: {peticion.origen}", px_orig, py_orig)
+        
+        # Encontrar el nodo que le sigue al origen para calcular a dónde va la línea
+        if len(ruta) > 1:
+            px_orig_ady, py_orig_ady = a_pixeles_escalado(pos[ruta[1]][0], pos[ruta[1]][1])
+        else:
+            px_orig_ady, py_orig_ady = px_orig, py_orig - 1 # Predeterminado si no hay más nodos
+            
+        dibujar_etiqueta_inteligente(f"Inicio: {peticion.origen}", px_orig, py_orig, px_orig_ady, py_orig_ady)
 
-        # 4. Dibujar Destino
+        # Dibujar Destino
         px_dest, py_dest = a_pixeles_escalado(pos[peticion.destino][0], pos[peticion.destino][1])
         draw.ellipse([(px_dest - radio_ext, py_dest - radio_ext), (px_dest + radio_ext, py_dest + radio_ext)], 
                      fill=color_destino, outline="white", width=grosor_borde_ext)
-        dibujar_etiqueta_inferior(f"Destino: {peticion.destino}", px_dest, py_dest)
         
+        # Encontrar el nodo anterior al destino para calcular de dónde viene la línea
+        if len(ruta) > 1:
+            px_dest_ady, py_dest_ady = a_pixeles_escalado(pos[ruta[-2]][0], pos[ruta[-2]][1])
+        else:
+            px_dest_ady, py_dest_ady = px_dest, py_dest - 1
+
+        dibujar_etiqueta_inteligente(f"Destino: {peticion.destino}", px_dest, py_dest, px_dest_ady, py_dest_ady)
+        
+        # Redimensionar la capa de dibujo con suavizado LANCZOS y pegar sobre el fondo
         capa_ruta = capa_ruta.resize((W, H), Image.Resampling.LANCZOS)
         img_final = Image.alpha_composite(img, capa_ruta)
         
+        # Convertir la imagen final a formato WEBP y codificarla en base64
         buffer = io.BytesIO()
         img_final.save(buffer, format="WEBP", quality=85) 
         img_b64 = base64.b64encode(buffer.getvalue()).decode()
@@ -231,6 +257,7 @@ def trazar_ruta(peticion: PeticionRuta):
     except Exception as e:
         return {"exito": False, "error": str(e)}
     
+# Iniciar el servidor con uvicorn
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
