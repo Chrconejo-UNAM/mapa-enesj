@@ -133,7 +133,7 @@ def trazar_ruta(peticion: PeticionRuta):
     try:
         distancia, ruta = nx.bidirectional_dijkstra(G, source=peticion.origen, target=peticion.destino, weight='weight')
         
-        img = Image.open('static/foto_enes_op.png').convert('RGBA')
+        img = Image.open('static/foto_enes_op.webp').convert('RGBA')
         W, H = img.size
         
         # Aumentar la resolución de la capa de dibujo para mejorar la calidad de las líneas y el texto
