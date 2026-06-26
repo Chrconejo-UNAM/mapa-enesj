@@ -44,7 +44,7 @@ pos = {
     'Salones de usos múltiples': (2, -0.25),
     'Cafetería': (21, 0.25), 'Juegos': (25.5, 0.375), 'Deportes': (30, 0.375), 'Explanada': (28, 0),
     'Tics': (24.25, 0.75), 'Intendencia de obras': (31, 0.75), 
-    'Túnel de viento': (43, 0.5), 'Unidad de investigación de ortesis y prótesis': (48, 0.25),
+    'Túnel de viento': (43, 0.5), 'Unidad de investigación de órtesis y prótesis': (48, 0.25),
     'Baños 1 sótano': (9, 0),
     'Baños 2 sótano': (51, 0.875),
     'Auditorio': (1, 0.5),
