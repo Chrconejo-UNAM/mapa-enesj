@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Navegador ENES Juriquilla</title>
-    <link rel="icon" href="static/logo_unam_dorado.png" type="image/png">
+    <link rel="icon" href="static/logo_unam_dorado.webp" type="image/webp">
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
@@ -32,7 +32,7 @@
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #050403;
+                --bg-color: #120F0F;
                 --text-color: #F8F9FA;
                 --card-bg: #111111;
                 --border-color: #333333;
@@ -91,7 +91,7 @@
         .header-titulo {
             text-align: center;
             font-weight: bold;
-            font-size: clamp(16px, 3.5vw, 35px);
+            font-size: clamp(20px, 3.5vw, 35px);
             line-height: 1.2;
             width: 40%;
         }
@@ -102,12 +102,16 @@
             object-fit: contain;
         }
 
+        .logo-unam-escudo {
+            max-height: 55px; 
+        }
+
         @media (max-width: 768px) {
             .logo-header { max-height: 45px; }
+            .logo-unam-escudo { max-height: 35px; } 
             .header-institucional { padding: 10px 5px; }
             .logos-izq, .logos-der { gap: 5px; }
         }
-
         .contenido-principal {
             max-width: 900px;
             margin: 0 auto;
@@ -238,10 +242,10 @@
     <header class="header-institucional">
         <div class="logos-izq">
             <a href="https://www.unam.mx/" target="_blank">
-                <img class="logo-header" src="static/logo_unam_dorado_1.png" alt="UNAM">
+                <img class="logo-header logo-unam-escudo" src="static/logo_unam_dorado_1.webp" alt="UNAM">
             </a>
-            <a href="#" target="_blank">
-                <img class="logo-header" src="static/logo_unam_475.jpg" alt="UNAM 475">
+            <a href="https://www.unam.mx/" target="_blank">
+                <img class="logo-header" src="static/Logo_475.webp" alt="UNAM 475">
             </a>
         </div>
         
@@ -251,7 +255,7 @@
         
         <div class="logos-der">
             <a href="https://www.enesjuriquilla.unam.mx/" target="_blank">
-                <img class="logo-header" src="static/logo_enes_dorado.png" alt="ENES">
+                <img class="logo-header" src="static/logo_enes_dorado.webp" alt="ENES">
             </a>
         </div>
     </header>
@@ -267,7 +271,11 @@
 
         <details>
             <summary><b>¿Cómo funciona esta tecnología?</b></summary>
-            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos</b>. Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, calculando la ruta más corta y eficiente entre los diferentes pisos del edificio.</p>
+            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos:</b> cada salón, escalera, laboratorio o área común se representa como un nodo, y los pasillos que los conectan como aristas con un peso igual a la distancia aproximada en metros entre ambos puntos.</p>
+
+            <p>Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, que explora todas las conexiones posibles entre tu ubicación actual y tu destino, y selecciona la combinación de tramos cuya suma de distancias sea la menor posible, considerando incluso cambios de piso a través de escaleras. </p>
+
+            <p>El mapa que ves no es una simulación: corresponde a la distribución real del edificio de la ENES Juriquilla, por lo que la ruta trazada refleja el camino que efectivamente recorrerías a pie dentro del plantel.</p>
         </details>
 
         <div class="caja-control">
@@ -279,7 +287,7 @@
                     <option value="Cafetería">Cafetería</option>
                     <option value="Auditorio">Auditorio</option>
                     <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Tics">Tics</option>
+                    <option value="Unidad de investigación de órtesis y prótesis">Unidad de investigación de órtesis y prótesis</option>
                 </optgroup>
                 </select>
 
@@ -291,7 +299,7 @@
                     <option value="Cafetería">Cafetería</option>
                     <option value="Auditorio">Auditorio</option>
                     <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Tics">Tics</option>
+                    <option value="Unidad de investigación de órtesis y prótesis">Unidad de investigación de órtesis y prótesis</option>
                 </optgroup>
                 </select>
 
@@ -307,31 +315,35 @@
         </div>
 
         <div class="map-container" id="map-container">
-            <img id="mapa-img" src="static/mapa_guia.png" alt="Mapa">
+            <img id="mapa-img" src="static/mapa_guia.webp" alt="Mapa">
         </div>
 
     </div>
 
     <footer class="footer">
         Hecho en México, Universidad Nacional Autónoma de México (UNAM).<br>
-        Desarrollado por estudiantes de la Licenciatura en Tecnología, ENES Juriquilla.
+        Desarrollado por estudiantes de la Licenciatura en Tecnología, ENES Juriquilla.<br>
         Ávila González Jimena, Macías García Mayra, <br>
         Pérez Rodríguez José Luis, Ramírez Conejo Christian Alexis<br>
         © 2026 Todos los derechos reservados.
     </footer>
     
     <script>
-        // ¡LISTA CATEGORIZADA! 
+        // Lista de categorías y sus nodos correspondientes 
         const categoriasNodos = {
             '📝 AULAS': [
                 'III-201', 'III-202', 'III-301', 'III-302', 'III-303', 'III-304',
-                'IV-101', 'IV-102', 'IV-103', 'IV-301', 'IV-302', 'IV-303', 'IV-304', 'IV-305',
-                'Salones de usos múltiples', 'V-101', 'V-102', 'V-301', 'V-302', 'V-303', 'V-304',
+                'IV-301', 'IV-302', 'IV-303', 'IV-304', 'IV-305',
+                'Salones de usos múltiples',
                 'V-401', 'V-402', 'V-403', 'V-404', 'VI-201', 'VI-202', 'VI-203', 'VI-204',
                 'VI-301', 'VI-302', 'VI-303', 'VI-304', 'VI-401', 'VI-402', 'VI-403', 'VI-404',
                 'VI-PB01', 'VI-PB02', 'VI-PB03', 'VI-PB04'
             ],
             '🔬 LABORATORIOS': [
+                'IV-101', 'IV-102', 'IV-103', 'V-101', 'V-102'
+            ],
+            '🖥️ LABORATORIOS DE CÓMPUTO': [
+                'V-301', 'V-302', 'V-303', 'V-304'
             ],
             '📚 CID': [
                 'CID planta baja', 'CID piso 1', 'CID piso 3', 'CID piso 4'
@@ -372,6 +384,7 @@
             selectDestino.innerHTML += optgroupDestino;
         });
 
+        // Función para trazar la ruta
         async function trazarRuta() {
             const origen = document.getElementById('origen').value;
             const destino = document.getElementById('destino').value;
