@@ -107,11 +107,19 @@
         }
 
         @media (max-width: 768px) {
-            .logo-header { max-height: 45px; }
-            .logo-unam-escudo { max-height: 35px; } 
-            .header-institucional { padding: 10px 5px; }
+            .logo-header { max-height: 60px; } 
+            .logo-unam-escudo { max-height: 50px; } 
+            
+            .header-institucional { padding: 12px 5px; }
             .logos-izq, .logos-der { gap: 5px; }
+            .logos-izq { width: 40%; }
+            .header-titulo { 
+                width: 35%; 
+                font-size: clamp(14px, 3.5vw, 18px);
+            }
+            .logos-der { width: 25%; }
         }
+
         .contenido-principal {
             max-width: 900px;
             margin: 0 auto;
@@ -271,7 +279,7 @@
 
         <details>
             <summary><b>¿Cómo funciona esta tecnología?</b></summary>
-            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos:</b> cada salón, escalera, laboratorio o área común se representa como un nodo, y los pasillos que los conectan como aristas con un peso igual a la distancia aproximada en metros entre ambos puntos.</p>
+            <p>Este sistema modela la infraestructura de la escuela usando la <b>Teoría de Grafos:</b> cada salón, escalera, baño o área común se representa como un nodo, y los pasillos que los conectan como aristas con un peso igual a la distancia aproximada en metros entre ambos puntos.</p>
 
             <p>Para encontrar el camino exacto, utiliza el <b>Algoritmo de Dijkstra</b>, que explora todas las conexiones posibles entre tu ubicación actual y tu destino, y selecciona la combinación de tramos cuya suma de distancias sea la menor posible, considerando incluso cambios de piso a través de escaleras. </p>
 
@@ -360,7 +368,7 @@
                 'Ajedrez', 'Auditorio', 'Cafetería', 'Canchas', 'Deportes', 'Entrada', 
                 'Entrada estacionamiento', 'Explanada', 'Gym al aire libre', 'Intendencia de obras', 
                 'Jardineras', 'Juegos', 'Microondas', 'Mini circuito', 'Paneles solares',
-                'Túnel de viento', 'Unidad de investigación de ortesis y prótesis', 'Vitrinas'
+                'Túnel de viento', 'Vitrinas'
             ]
         };
 
@@ -435,7 +443,5 @@
             btn.disabled = false;
         }
     </script>
-</body>
-</html>
 </body>
 </html>
