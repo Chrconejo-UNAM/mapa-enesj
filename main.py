@@ -29,7 +29,7 @@ def generar_grafo():
     rutas_p1 = [('Escaleras 1 piso 1', 'Baños 1 piso 1', 5), ('Escaleras 1 piso 1', 'IV-101', 9), ('IV-101', 'IV-102', 16), ('IV-102', 'IV-103', 17), ('IV-103', 'Escaleras 2 piso 1', 15), ('Escaleras 2 piso 1', 'Baños 2 piso 1', 5), ('Escaleras 2 piso 1', 'V-101', 10), ('V-101', 'V-102', 18), ('V-102', 'Ajedrez', 31.5), ('CID piso 1', 'Ajedrez', 14), ('Ajedrez', 'Escaleras 3 piso 1', 13), ('Escaleras 3 piso 1', 'Baños 3 piso 1', 5)]
     rutas_p2 = [('III-201', 'III-202', 8), ('III-202', 'Secretaría administrativa', 8), ('Secretaría administrativa', 'Escaleras 1 piso 2', 11), ('Escaleras 1 piso 2', 'Baños 1 piso 2', 5), ('Escaleras 1 piso 2', 'Secretaría académica', 15.5), ('Secretaría académica', 'Secretaría general', 6.5), ('Secretaría general', 'Sala de juntas', 20), ('Sala de juntas', 'Dirección', 7.5), ('Dirección', 'Escaleras 2 piso 2', 8.5), ('Escaleras 2 piso 2', 'Baños 2 piso 2', 5), ('Escaleras 2 piso 2', 'Secretaría de educación y vinculación', 16), ('Secretaría de educación y vinculación', 'Servicios escolares', 17.5), ('Servicios escolares', 'VI-201', 16), ('VI-201', 'VI-202', 8), ('VI-202', 'VI-203', 8), ('VI-203', 'VI-204', 8), ('VI-204', 'Escaleras 3 piso 2', 5), ('Escaleras 3 piso 2', 'Baños 3 piso 2', 5)]
     rutas_p3 = [('III-301', 'III-302', 8), ('III-302', 'III-303', 8), ('III-303', 'III-304', 8), ('III-304', 'Escaleras 1 piso 3', 5), ('Escaleras 1 piso 3', 'Baños 1 piso 3', 5), ('Escaleras 1 piso 3', 'IV-301', 5), ('IV-301', 'IV-302', 8), ('IV-302', 'IV-303', 8), ('IV-303', 'IV-304', 8), ('IV-304', 'IV-305', 8), ('IV-305', 'Escaleras 2 piso 3', 5), ('Escaleras 2 piso 3', 'Baños 2 piso 3', 5), ('Escaleras 2 piso 3', 'V-301', 5), ('V-301', 'V-302', 8), ('V-302', 'V-303', 8), ('V-303', 'V-304', 8), ('V-304', 'VI-301', 8), ('VI-301', 'VI-302', 8), ('VI-302', 'VI-303', 8), ('VI-303', 'CID piso 3', 14), ('VI-303', 'VI-304', 8), ('VI-304', 'Escaleras 3 piso 3', 5), ('Escaleras 3 piso 3', 'Baños 3 piso 3', 5)]
-    rutas_p4 = [('Zona de docentes 1', 'Escaleras 1 piso 4', 16), ('Escaleras 1 piso 4', 'Baños 1 piso 4', 5), ('Escaleras 1 piso 4', 'Zona de docentes 2', 17), ('Zona de docentes 2', 'Zona de docentes 3', 8), ('Zona de docentes 3', 'Zona de docentes 4', 8), ('Zona de docentes 4', 'Zona de docentes 5', 8), ('Zona de docentes 5', 'Escaleras 2 piso 4', 12), ('Escaleras 2 piso 4', 'Baños 2 piso 4', 5), ('Escaleras 2 piso 4', 'V-401', 10), ('V-401', 'V-402', 8), ('V-402', 'V-403', 8), ('V-403', 'V-404', 8), ('V-404', 'VI-401', 8), ('VI-401', 'VI-402', 8), ('VI-402', 'CID piso 4', 14), ('VI-402', 'VI-403', 8), ('VI-403', 'VI-404', 8), ('VI-404', 'Escaleras 3 piso 4', 5), ('Escaleras 3 piso 4', 'Baños 3 piso 4', 5)]
+    rutas_p4 = [('Zona de docentes 1', 'Escaleras 1 piso 4', 16), ('Escaleras 1 piso 4', 'Baños 1 piso 4', 5), ('Escaleras 1 piso 4', 'Zona de docentes 2', 5), ('Zona de docentes 2', 'Zona de docentes 3', 8), ('Zona de docentes 3', 'Zona de docentes 4', 8), ('Zona de docentes 4', 'Zona de docentes 5', 8), ('Zona de docentes 5', 'Escaleras 2 piso 4', 12), ('Escaleras 2 piso 4', 'Baños 2 piso 4', 5), ('Escaleras 2 piso 4', 'V-401', 10), ('V-401', 'V-402', 8), ('V-402', 'V-403', 8), ('V-403', 'V-404', 8), ('V-404', 'VI-401', 8), ('VI-401', 'VI-402', 8), ('VI-402', 'CID piso 4', 14), ('VI-402', 'VI-403', 8), ('VI-403', 'VI-404', 8), ('VI-404', 'Escaleras 3 piso 4', 5), ('Escaleras 3 piso 4', 'Baños 3 piso 4', 5)]
     rutas_p5 = [('Paneles solares', 'Escaleras 1 piso 5', 5), ('Escaleras 1 piso 5', 'Baños 1 piso 5', 5), ('Escaleras 1 piso 5', 'Escaleras 2 piso 5', 55), ('Jardineras', 'Escaleras 2 piso 5', 12), ('Gym al aire libre', 'Escaleras 2 piso 5', 30.5 ), ('Escaleras 2 piso 5', 'Baños 2 piso 5', 5), ('Gym al aire libre', 'Escaleras 3 piso 5', 35)]
     escaleras = [('Escaleras 1 sótano', 'Escaleras 1 planta baja', 5), ('Escaleras 2 sótano', 'Vitrinas', 5), ('Escaleras 3 sótano', 'Escaleras 3 planta baja', 5), ('Escaleras 1 planta baja', 'Escaleras 1 piso 1', 5), ('Escaleras 2 planta baja', 'Escaleras 2 piso 1', 5), ('Escaleras 3 planta baja', 'Escaleras 3 piso 1', 5), ('Escaleras 1 piso 1', 'Escaleras 1 piso 2', 5), ('Escaleras 2 piso 1', 'Escaleras 2 piso 2', 5), ('Escaleras 3 piso 1', 'Escaleras 3 piso 2', 5), ('Escaleras 1 piso 2', 'Escaleras 1 piso 3', 5), ('Escaleras 2 piso 2', 'Escaleras 2 piso 3', 5), ('Escaleras 3 piso 2', 'Escaleras 3 piso 3', 5), ('Escaleras 1 piso 3', 'Escaleras 1 piso 4', 5), ('Escaleras 2 piso 3', 'Escaleras 2 piso 4', 5), ('Escaleras 3 piso 3', 'Escaleras 3 piso 4', 5), ('Escaleras 1 piso 4', 'Escaleras 1 piso 5', 5), ('Escaleras 2 piso 4', 'Escaleras 2 piso 5', 5), ('Escaleras 3 piso 4', 'Escaleras 3 piso 5', 5)]
 
@@ -131,7 +131,22 @@ def serve_home():
 @app.post("/api/trazar")
 def trazar_ruta(peticion: PeticionRuta):
     try:
-        distancia, ruta = nx.bidirectional_dijkstra(G, source=peticion.origen, target=peticion.destino, weight='weight')
+        alias_nodos = {
+            "Objetos perdidos": "Secretaría de educación y vinculación",
+            #"Unidad Jurídica": "",
+            #"Centro de lenguas": "",
+            #"Tutorías": "",
+            #"CIIG": "",
+            #"Personas orientadoras de la comunidad": "",
+            "Observatorio de negocios internacionales": "Zona de docentes 1",
+            "Internacionalización": "Zona de docentes 1",
+            "PC Puma": "CID planta baja",
+            "Cajas": "Secretaría administrativa"
+            }
+        
+        origen_real = alias_nodos.get(peticion.origen, peticion.origen)
+        destino_real = alias_nodos.get(peticion.destino, peticion.destino)
+        distancia, ruta = nx.dijkstra_path(G, source=origen_real, target=destino_real, weight='weight')
         
         img = Image.open('static/foto_enes_op.webp').convert('RGBA')
         W, H = img.size
@@ -211,7 +226,7 @@ def trazar_ruta(peticion: PeticionRuta):
             draw.text((px, txt_y), texto, fill="white", font=fuente, anchor=anchor)
 
         # Dibujar Origen
-        px_orig, py_orig = a_pixeles_escalado(pos[peticion.origen][0], pos[peticion.origen][1])
+        px_orig, py_orig = a_pixeles_escalado(pos[origen_real][0], pos[origen_real][1])
         draw.ellipse([(px_orig - radio_ext, py_orig - radio_ext), (px_orig + radio_ext, py_orig + radio_ext)], 
                      fill=color_inicio, outline="white", width=grosor_borde_ext)
         
@@ -221,10 +236,10 @@ def trazar_ruta(peticion: PeticionRuta):
         else:
             px_orig_ady, py_orig_ady = px_orig, py_orig - 1 # Predeterminado si no hay más nodos
             
-        dibujar_etiqueta_inteligente(f"Inicio: {peticion.origen}", px_orig, py_orig, px_orig_ady, py_orig_ady)
+        dibujar_etiqueta_inteligente(f"Inicio: {origen_real}", px_orig, py_orig, px_orig_ady, py_orig_ady)
 
         # Dibujar Destino
-        px_dest, py_dest = a_pixeles_escalado(pos[peticion.destino][0], pos[peticion.destino][1])
+        px_dest, py_dest = a_pixeles_escalado(pos[destino_real][0], pos[destino_real][1])
         draw.ellipse([(px_dest - radio_ext, py_dest - radio_ext), (px_dest + radio_ext, py_dest + radio_ext)], 
                      fill=color_destino, outline="white", width=grosor_borde_ext)
         
@@ -234,7 +249,7 @@ def trazar_ruta(peticion: PeticionRuta):
         else:
             px_dest_ady, py_dest_ady = px_dest, py_dest - 1
 
-        dibujar_etiqueta_inteligente(f"Destino: {peticion.destino}", px_dest, py_dest, px_dest_ady, py_dest_ady)
+        dibujar_etiqueta_inteligente(f"Destino: {destino_real}", px_dest, py_dest, px_dest_ady, py_dest_ady)
         
         # Redimensionar la capa de dibujo con suavizado LANCZOS y pegar sobre el fondo
         capa_ruta = capa_ruta.resize((W, H), Image.Resampling.LANCZOS)
@@ -245,10 +260,54 @@ def trazar_ruta(peticion: PeticionRuta):
         img_final.save(buffer, format="WEBP", quality=85) 
         img_b64 = base64.b64encode(buffer.getvalue()).decode()
 
+        camino_mostrar = ruta.copy()
+        camino_mostrar[0] = peticion.origen
+        camino_mostrar[-1] = peticion.destino
+
+        # Implementación de elevadores
+        camino_resumido = []
+        i = 0
+        while i < len(camino_mostrar):
+            nodo = camino_mostrar[i]
+            
+            # Revisamos si el nodo es una escalera
+            if "Escaleras" in nodo:
+                # Identificamos de qué escalera se trata
+                palabras = nodo.split()
+                prefix = palabras[0] + " " + palabras[1] 
+                
+                # Contamos cuántos nodos consecutivos son de esta misma escalera
+                j = i
+                while j < len(camino_mostrar) and camino_mostrar[j].startswith(prefix):
+                    j += 1
+                
+                nodos_escalera = j - i
+                
+                # Si pasa por 3 o más nodos de la misma escalera, se reemplaza por un elevador
+                if nodos_escalera >= 3:
+                    nodo_destino_escalera = camino_mostrar[j - 1]
+                    nivel_crudo = nodo_destino_escalera.replace(prefix, "").strip().lower()
+
+                    if "planta baja" in nivel_crudo:
+                        destino_formato = f"la {nivel_crudo}"
+                    else:
+                        nivel_destino = nivel_crudo.split()[0] 
+                        destino_formato = f"el {nivel_destino}"
+                    elevador_nombre = prefix.replace("Escaleras", "Elevador") # Cambia a "Elevador n"
+                    camino_resumido.append(f" {elevador_nombre} hasta {destino_formato}")
+                else:
+                    # Si son 2 nodos (solo 1 piso) o 1 nodo, se queda como escalera
+                    for k in range(i, j):
+                        camino_resumido.append(camino_mostrar[k])
+                i = j
+            else:
+                camino_resumido.append(nodo)
+                i += 1
+
         return {
             "exito": True,
             "distancia": distancia,
-            "camino": " ➔ ".join(ruta),
+            "camino": " ➔ ".join(camino_resumido),
             "imagen": f"data:image/webp;base64,{img_b64}" 
         }
 
