@@ -287,6 +287,7 @@ def trazar_ruta(peticion: PeticionRuta):
                 if nodos_escalera >= 3:
                     nodo_destino_escalera = camino_mostrar[j - 1]
                     nivel_crudo = nodo_destino_escalera.replace(prefix, "").strip().lower()
+                    nivel_destino = nivel_crudo
 
                     if "planta baja" in nivel_crudo:
                         destino_formato = f"la {nivel_crudo}"
