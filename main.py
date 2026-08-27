@@ -291,7 +291,6 @@ def trazar_ruta(peticion: PeticionRuta):
                     if "planta baja" in nivel_crudo:
                         destino_formato = f"la {nivel_crudo}"
                     else:
-                        nivel_destino = nivel_crudo.split()[0] 
                         destino_formato = f"el {nivel_destino}"
                     elevador_nombre = prefix.replace("Escaleras", "Elevador") # Cambia a "Elevador n"
                     camino_resumido.append(f" {elevador_nombre} hasta {destino_formato}")
