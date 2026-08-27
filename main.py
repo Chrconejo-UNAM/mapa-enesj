@@ -146,7 +146,7 @@ def trazar_ruta(peticion: PeticionRuta):
         
         origen_real = alias_nodos.get(peticion.origen, peticion.origen)
         destino_real = alias_nodos.get(peticion.destino, peticion.destino)
-        distancia, ruta = nx.dijkstra_path(G, source=origen_real, target=destino_real, weight='weight')
+        distancia, ruta = nx.bidirectional_dijkstra(G, source=origen_real, target=destino_real, weight='weight')
         
         img = Image.open('static/foto_enes_op.webp').convert('RGBA')
         W, H = img.size
