@@ -132,12 +132,10 @@ def serve_home():
 def trazar_ruta(peticion: PeticionRuta):
     try:
         alias_nodos = {
-            "Objetos perdidos": "Secretaría de educación y vinculación",
-            #"Unidad Jurídica": "",
-            #"Centro de lenguas": "",
-            #"Tutorías": "",
-            #"CIIG": "",
-            #"Personas orientadoras de la comunidad": "",
+            "Objetos perdidos": "Secretaría de atención a la comunidad y vinculación",
+            "Unidad jurídica": "Secretaría de atencion a la comunidad y vinculación",
+            "Centro de lenguas": "Secretaría de atención a la comunidad y vinculación",
+            "Personas orientadoras de la comunidad": "Zona de docentes 1",
             "Observatorio de negocios internacionales": "Zona de docentes 1",
             "Internacionalización": "Zona de docentes 1",
             "PC Puma": "CID planta baja",
