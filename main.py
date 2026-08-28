@@ -21,6 +21,7 @@ app.add_middleware(
 
 from fastapi import Request
 
+
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
