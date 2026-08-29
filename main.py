@@ -223,7 +223,7 @@ def trazar_ruta(peticion: PeticionRuta):
 
         try:
             fuentes_bonitas = ["arialbd.ttf", "DejaVuSans-Bold.ttf", "arial.ttf"]
-            for font_name in fuentes_bonitas:
+        for font_name in fuentes_bonitas:
             try:
                     fuente = ImageFont.truetype(font_name, tamano_fuente)
                     break
