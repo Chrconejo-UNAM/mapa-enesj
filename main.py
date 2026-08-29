@@ -221,10 +221,10 @@ def trazar_ruta(peticion: PeticionRuta):
             draw.ellipse([(px - radio_int, py - radio_int), (px + radio_int, py + radio_int)], 
                         fill="white", outline=color_inicio, width=grosor_borde_int)
 
-        try:
+                try:
             fuentes_bonitas = ["arialbd.ttf", "DejaVuSans-Bold.ttf", "arial.ttf"]
-        for font_name in fuentes_bonitas:
-            try:
+            for font_name in fuentes_bonitas:
+                try:
                     fuente = ImageFont.truetype(font_name, tamano_fuente)
                     break
                 except IOError:
@@ -233,6 +233,7 @@ def trazar_ruta(peticion: PeticionRuta):
                 fuente = ImageFont.load_default()
         except:
             fuente = ImageFont.load_default()
+            
 
         # Funcion para dibujar etiquetas de manera inteligente, evitando que se superpongan con la ruta
         def dibujar_etiqueta_inteligente(texto, px, py, px_adyacente, py_adyacente):
