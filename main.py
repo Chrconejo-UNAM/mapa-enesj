@@ -1,3 +1,17 @@
+# SISTEMA DE NAVEGACIÓN ENES JURIQUILLA (UNAM)
+
+# Descripción 
+# Backend en FastAPI utilizando teoría de grafos y el algoritmo de 
+# Dijkstra para calcular y trazar rutas óptimas dentro de las instalaciones 
+# de la ENES Juriquilla, generando mapas visuales dinámicos e instrucciones 
+# de navegación detalladas
+
+# INTEGRANTES: 
+# - Ávila González Jimena
+# - Macías García Mayra
+# - Pérez Rodríguez José Luis
+# - Ramírez Conejo Christian Alexis
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -10,6 +24,7 @@ import io
 import os
 import uvicorn
 
+# Configuración de la aplicación
 app = FastAPI()
 
 app.add_middleware(
@@ -19,11 +34,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Protocolos de seguridad
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
     
-    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none';"
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none';"
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
@@ -31,117 +47,169 @@ async def add_security_headers(request: Request, call_next):
     
     return response
 
+# Montar la carpeta de archivos estáticos (CSS e imagenes)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Generar el grafo de la ENESJ
 def generar_grafo():
     G = nx.Graph()
-    rutas_ps = [('Salones de usos múltiples', 'Escaleras 1 sótano', 11), ('Escaleras 1 sótano', 'Baños 1 sótano', 5), ('Escaleras 1 sótano', 'Cafetería', 17), ('Cafetería', 'Juegos', 43), ('Juegos', 'Explanada', 3), ('Explanada', 'Escaleras 2 sótano', 12), ('Juegos', 'Tics', 5), ('Juegos', 'Deportes', 8), ('Tics', 'Intendencia de obras', 15), ('Intendencia de obras', 'Túnel de viento', 35), ('Unidad de investigación de órtesis y prótesis', 'Escaleras 3 sótano', 5), ('Escaleras 3 sótano', 'Baños 2 sótano', 5)]
-    
-    rutas_pb = [('Auditorio', 'Escaleras 1 planta baja', 29), ('Escaleras 1 planta baja', 'Baños 1 planta baja', 5), ('Escaleras 1 planta baja', 'Entrada', 16), ('Entrada', 'Recepción', 20), ('Recepción','Baños 2 planta baja', 17), ('Baños 2 planta baja','Escaleras 2 planta baja', 5), ('Escaleras 2 planta baja','Vitrinas', 5), ('Vitrinas','VI-PB01', 43), ('Escaleras 2 sótano',  'VI-PB01', 15), ('Escaleras 2 sótano', 'Microondas', 30.5), ('VI-PB01','Nutrición', 13), ('VI-PB01','VI-PB02', 8), ('VI-PB02','Médico', 13), ('VI-PB02', 'Lactancia', 13), ('VI-PB02', 'VI-PB03', 8), ('VI-PB03', 'Psicopedagogía', 13), ('VI-PB03', 'VI-PB04', 8), ('VI-PB04', 'CID planta baja', 13), ('VI-PB04', 'Escaleras 3 planta baja', 11), ('Escaleras 3 planta baja', 'Baños 3 planta baja', 5), ('Mini circuito', 'Canchas', 25), ('Canchas', 'Microondas', 30), ('Entrada estacionamiento', 'Microondas', 8), ('Mini circuito', 'Unidad de investigación de órtesis y prótesis', 10)]
-    
-    rutas_p1 = [('Escaleras 1 piso 1', 'Baños 1 piso 1', 5), ('Escaleras 1 piso 1', 'IV-101', 9), ('IV-101', 'IV-102', 17), ('IV-102', 'IV-103', 17), ('IV-103', 'Escaleras 2 piso 1', 15), ('Escaleras 2 piso 1', 'Baños 2 piso 1', 5), ('Escaleras 2 piso 1', 'V-101', 10), ('V-101', 'V-102', 18), ('V-102', 'Ajedrez', 31.5), ('CID piso 1', 'Ajedrez', 14), ('Ajedrez', 'Escaleras 3 piso 1', 13), ('Escaleras 3 piso 1', 'Baños 3 piso 1', 5)]
-    
-    rutas_p2 = [('III-201', 'III-202', 8), ('III-202', 'Secretaría administrativa', 8), ('Secretaría administrativa', 'Escaleras 1 piso 2', 11), ('Escaleras 1 piso 2', 'Baños 1 piso 2', 5), ('Escaleras 1 piso 2', 'Secretaría académica', 15.5), ('Secretaría académica', 'Secretaría general', 6.5), ('Secretaría general', 'Sala de juntas', 19.9), ('Sala de juntas', 'Dirección', 7.5), ('Dirección', 'Escaleras 2 piso 2', 8.5), ('Escaleras 2 piso 2', 'Baños 2 piso 2', 5), ('Escaleras 2 piso 2', 'Secretaría de atención a la comunidad y vinculación', 16), ('Secretaría de atención a la comunidad y vinculación', 'Servicios escolares', 17.5), ('Servicios escolares', 'VI-201', 16), ('VI-201', 'VI-202', 8), ('VI-202', 'VI-203', 8), ('VI-203', 'VI-204', 8), ('VI-204', 'Escaleras 3 piso 2', 5), ('Escaleras 3 piso 2', 'Baños 3 piso 2', 5)]
-    
-    rutas_p3 = [('III-301', 'III-302', 8), ('III-302', 'III-303', 8), ('III-303', 'III-304', 8), ('III-304', 'Escaleras 1 piso 3', 5), ('Escaleras 1 piso 3', 'Baños 1 piso 3', 5), ('Escaleras 1 piso 3', 'IV-301', 9), ('IV-301', 'IV-302', 10), ('IV-302', 'IV-303', 9.8), ('IV-303', 'IV-304', 10), ('IV-304', 'IV-305', 10), ('IV-305', 'Escaleras 2 piso 3', 9), ('Escaleras 2 piso 3', 'Baños 2 piso 3', 5), ('Escaleras 2 piso 3', 'V-301', 5), ('V-301', 'V-302', 8), ('V-302', 'V-303', 8), ('V-303', 'V-304', 8), ('V-304', 'VI-301', 8), ('VI-301', 'VI-302', 8), ('VI-302', 'VI-303', 8), ('VI-303', 'CID piso 3', 14), ('VI-303', 'VI-304', 8), ('VI-304', 'Escaleras 3 piso 3', 5), ('Escaleras 3 piso 3', 'Baños 3 piso 3', 5)]
-    
-    rutas_p4 = [('Zona de docentes 1', 'Escaleras 1 piso 4', 16), ('Escaleras 1 piso 4', 'Baños 1 piso 4', 5), ('Escaleras 1 piso 4', 'Zona de docentes 2', 11), ('Zona de docentes 2', 'Zona de docentes 3', 10), ('Zona de docentes 3', 'Zona de docentes 4', 9.7), ('Zona de docentes 4', 'Zona de docentes 5', 10), ('Zona de docentes 5', 'Escaleras 2 piso 4', 17), ('Escaleras 2 piso 4', 'Baños 2 piso 4', 5), ('Escaleras 2 piso 4', 'V-401', 10), ('V-401', 'V-402', 8), ('V-402', 'V-403', 8), ('V-403', 'V-404', 8), ('V-404', 'VI-401', 8), ('VI-401', 'VI-402', 8), ('VI-402', 'CID piso 4', 14), ('VI-402', 'VI-403', 8), ('VI-403', 'VI-404', 8), ('VI-404', 'Escaleras 3 piso 4', 5), ('Escaleras 3 piso 4', 'Baños 3 piso 4', 5)]
-    
-    rutas_p5 = [('Paneles solares', 'Escaleras 1 piso 5', 5), ('Escaleras 1 piso 5', 'Baños 1 piso 5', 5), ('Escaleras 1 piso 5', 'Escaleras 2 piso 5', 57.6), ('Jardineras', 'Escaleras 2 piso 5', 12), ('Gym al aire libre', 'Escaleras 2 piso 5', 30.5 ), ('Escaleras 2 piso 5', 'Baños 2 piso 5', 5), ('Gym al aire libre', 'Escaleras 3 piso 5', 35)]
-    
-    escaleras = [('Escaleras 1 sótano', 'Escaleras 1 planta baja', 5), ('Escaleras 2 sótano', 'Vitrinas', 5), ('Escaleras 3 sótano', 'Escaleras 3 planta baja', 5), ('Escaleras 1 planta baja', 'Escaleras 1 piso 1', 5), ('Escaleras 2 planta baja', 'Escaleras 2 piso 1', 5), ('Escaleras 3 planta baja', 'Escaleras 3 piso 1', 5), ('Escaleras 1 piso 1', 'Escaleras 1 piso 2', 5), ('Escaleras 2 piso 1', 'Escaleras 2 piso 2', 5), ('Escaleras 3 piso 1', 'Escaleras 3 piso 2', 5), ('Escaleras 1 piso 2', 'Escaleras 1 piso 3', 5), ('Escaleras 2 piso 2', 'Escaleras 2 piso 3', 5), ('Escaleras 3 piso 2', 'Escaleras 3 piso 3', 5), ('Escaleras 1 piso 3', 'Escaleras 1 piso 4', 5), ('Escaleras 2 piso 3', 'Escaleras 2 piso 4', 5), ('Escaleras 3 piso 3', 'Escaleras 3 piso 4', 5), ('Escaleras 1 piso 4', 'Escaleras 1 piso 5', 5), ('Escaleras 2 piso 4', 'Escaleras 2 piso 5', 5), ('Escaleras 3 piso 4', 'Escaleras 3 piso 5', 5)]
+
+    rutas_ps = [('Salones de usos múltiples', 'Escaleras 1 sótano', 11), ('Escaleras 1 sótano', 'Cafetería', 17), ('Cafetería', 'Juegos', 43), ('Cafetería', 'Pared morada', 30), ('Pared morada', 'Explanada', 3), ('Pared morada', 'Elevador sótano', 5), ('Explanada', 'Escaleras 2 sótano', 12), ('Juegos', 'Tics', 5), ('Juegos', 'Deportes', 8), ('Tics', 'Intendencia de obras', 15), ('Intendencia de obras', 'Túnel de viento', 35), ('Unidad de investigación de órtesis y prótesis', 'Escaleras 3 sótano', 5)]
+
+    rutas_pb = [('Auditorio', 'Escaleras 1 planta baja', 29), ('Escaleras 1 planta baja', 'Entrada', 16), ('Entrada', 'Recepción', 20), ('Escaleras 2 planta baja','Vitrinas', 5), ('Vitrinas','VI-PB01', 43), ('Escaleras 2 sótano',  'VI-PB01', 15), ('Escaleras 2 sótano', 'Microondas', 30.5), ('VI-PB01','Nutrición', 13), ('VI-PB01','VI-PB02', 8), ('VI-PB02','Médico', 13), ('VI-PB02', 'Lactancia', 13), ('VI-PB02', 'VI-PB03', 8), ('VI-PB03', 'Psicopedagogía', 13), ('VI-PB03', 'VI-PB04', 8), ('VI-PB04', 'CID planta baja', 13), ('VI-PB04', 'Escaleras 3 planta baja', 11), ('Mini circuito', 'Canchas', 25), ('Canchas', 'Microondas', 30), ('Entrada estacionamiento', 'Microondas', 8), ('Mini circuito', 'Unidad de investigación de órtesis y prótesis', 10)]
+
+    rutas_p1 = [('Escaleras 1 piso 1', 'IV-101', 9), ('IV-101', 'IV-102', 17), ('IV-102', 'IV-103', 17), ('IV-103', 'Escaleras 2 piso 1', 15), ('Escaleras 2 piso 1', 'V-101', 10), ('V-101', 'V-102', 18), ('V-102', 'Ajedrez', 31.5), ('CID piso 1', 'Ajedrez', 14), ('Ajedrez', 'Escaleras 3 piso 1', 13)]
+
+    rutas_p2 = [('III-201', 'III-202', 8), ('III-202', 'Secretaría administrativa', 8), ('Secretaría administrativa', 'Escaleras 1 piso 2', 11), ('Escaleras 1 piso 2', 'Secretaría académica', 15.5), ('Secretaría académica', 'Secretaría general', 6.5), ('Secretaría general', 'Sala de juntas', 19.9), ('Sala de juntas', 'Dirección', 7.5), ('Dirección', 'Escaleras 2 piso 2', 8.5), ('Escaleras 2 piso 2', 'Unidad Jurídica', 16), ('Secretaría de atención a la comunidad y vinculación', 'Servicios escolares', 17.5), ('Servicios escolares', 'VI-201', 16), ('VI-201', 'VI-202', 8), ('VI-202', 'VI-203', 8), ('VI-203', 'VI-204', 8), ('VI-204', 'Escaleras 3 piso 2', 5)]
+
+    rutas_p3 = [('III-301', 'III-302', 8), ('III-302', 'III-303', 8), ('III-303', 'III-304', 8), ('III-304', 'Escaleras 1 piso 3', 5), ('Escaleras 1 piso 3', 'IV-301', 9), ('IV-301', 'IV-302', 10), ('IV-302', 'IV-303', 9.8), ('IV-303', 'IV-304', 10), ('IV-304', 'IV-305', 10), ('IV-305', 'Escaleras 2 piso 3', 9), ('Escaleras 2 piso 3', 'V-301', 5), ('V-301', 'V-302', 8), ('V-302', 'V-303', 8), ('V-303', 'V-304', 8), ('V-304', 'VI-301', 8), ('VI-301', 'VI-302', 8), ('VI-302', 'VI-303', 8), ('VI-303', 'CID piso 3', 14), ('VI-303', 'VI-304', 8), ('VI-304', 'Escaleras 3 piso 3', 5)]
+
+    rutas_p4 = [('Zona de docentes 1', 'Escaleras 1 piso 4', 16), ('Escaleras 1 piso 4', 'Zona de docentes 2', 11), ('Zona de docentes 2', 'Zona de docentes 3', 10), ('Zona de docentes 3', 'Zona de docentes 4', 9.7), ('Zona de docentes 4', 'Zona de docentes 5', 10), ('Zona de docentes 5', 'Escaleras 2 piso 4', 17), ('Escaleras 2 piso 4', 'V-401', 10), ('V-401', 'V-402', 8), ('V-402', 'V-403', 8), ('V-403', 'V-404', 8), ('V-404', 'VI-401', 8), ('VI-401', 'VI-402', 8), ('VI-402', 'CID piso 4', 14), ('VI-402', 'VI-403', 8), ('VI-403', 'VI-404', 8), ('VI-404', 'Escaleras 3 piso 4', 5)]
+
+    rutas_p5 = [('Paneles solares', 'Escaleras 1 piso 5', 5), ('Escaleras 1 piso 5', 'Escaleras 2 piso 5', 57.6), ('Jardineras', 'Escaleras 2 piso 5', 12), ('Gym al aire libre', 'Escaleras 2 piso 5', 30.5 ), ('Gym al aire libre', 'Escaleras 3 piso 5', 35)]
+
+    escaleras = [('Elevador sótano', 'Escaleras 2 planta baja', 5), ('Escaleras 1 sótano', 'Escaleras 1 planta baja', 5), ('Escaleras 2 sótano', 'Vitrinas', 5), ('Escaleras 3 sótano', 'Escaleras 3 planta baja', 5), ('Escaleras 1 planta baja', 'Escaleras 1 piso 1', 5), ('Escaleras 2 planta baja', 'Escaleras 2 piso 1', 5), ('Escaleras 3 planta baja', 'Escaleras 3 piso 1', 5), ('Escaleras 1 piso 1', 'Escaleras 1 piso 2', 5), ('Escaleras 2 piso 1', 'Escaleras 2 piso 2', 5), ('Escaleras 3 piso 1', 'Escaleras 3 piso 2', 5), ('Escaleras 1 piso 2', 'Escaleras 1 piso 3', 5), ('Escaleras 2 piso 2', 'Escaleras 2 piso 3', 5), ('Escaleras 3 piso 2', 'Escaleras 3 piso 3', 5), ('Escaleras 1 piso 3', 'Escaleras 1 piso 4', 5), ('Escaleras 2 piso 3', 'Escaleras 2 piso 4', 5), ('Escaleras 3 piso 3', 'Escaleras 3 piso 4', 5), ('Escaleras 1 piso 4', 'Escaleras 1 piso 5', 5), ('Escaleras 2 piso 4', 'Escaleras 2 piso 5', 5), ('Escaleras 3 piso 4', 'Escaleras 3 piso 5', 5)]
 
     G.add_weighted_edges_from(rutas_ps + rutas_pb + rutas_p1 + rutas_p2 + rutas_p3 + rutas_p4 + rutas_p5 + escaleras)
     return G
 
 # Posiciones de los nodos en el mapa (x, y)
 pos = {
-    'Escaleras 1 sótano': (7, -0.25), 'Escaleras 1 planta baja': (7, 0.5),
-    'Escaleras 2 sótano': (35, 0.75), 'Escaleras 2 planta baja': (26, 1),
-    'Escaleras 3 sótano': (50, 0.75), 'Escaleras 3 planta baja': (50, 1.25),
+    # Sótano
+    'Elevador sótano': (27.75, 0.375),
+    'Escaleras 1 sótano': (5.8, -0.25), 
+    'Escaleras 2 sótano': (35, 0.75), 
+    'Escaleras 3 sótano': (50, 0.75), 
+
     'Salones de usos múltiples': (2, -0.25),
-    'Cafetería': (21, 0.25), 'Juegos': (25.5, 0.375), 'Deportes': (30, 0.375), 'Explanada': (28, 0),
-    'Tics': (24.25, 0.75), 'Intendencia de obras': (31, 0.75), 
-    'Túnel de viento': (43, 0.5), 'Unidad de investigación de órtesis y prótesis': (48, 0.25),
-    'Baños 1 sótano': (9, 0),
-    'Baños 2 sótano': (51, 0.875),
+    'Cafetería': (21, 0.25), 
+    'Tics': (24.25, 0.75), 
+    'Juegos': (25.5, 0.5), 
+    'Pared morada': (26, 0.25),
+    'Explanada': (28, 0), 
+    'Deportes': (30, 0.375), 
+    'Intendencia de obras': (31, 0.75), 
+    'Túnel de viento': (43, 0.5), 
+    'Unidad de investigación de órtesis y prótesis': (48, 0.25),
+
+    # Planta baja
+    'Escaleras 1 planta baja': (5.7, 0.5),
+    'Escaleras 2 planta baja': (27.75, 1),
+    'Escaleras 3 planta baja': (50, 1.25),
+    
     'Auditorio': (1, 0.5),
     'Entrada': (16, 0.75),
     'Recepción': (20, 1),
-    'Baños 1 planta baja': (9, 0.625),
-    'Baños 2 planta baja': (25, 1.125),
-    'Baños 3 planta baja': (51, 1.375),
     'Vitrinas': (31, 1),
-    'VI-PB01': (38, 1.25),
+    'Entrada estacionamiento': (33, -0.75),
     'Microondas': (36, -0.5),
-    'VI-PB02': (41, 1.25),
-    'VI-PB03': (44, 1.25),
-    'VI-PB04': (47, 1.25),
+    'VI-PB01': (38, 1.25),
     'Nutrición': (38, 1),
     'Médico': (40, 1),
+    'VI-PB02': (41, 1.25),
     'Lactancia': (42, 1),
+    'VI-PB03': (44, 1.25),
     'Psicopedagogía': (44, 1),
     'CID planta baja': (46, 1),
-    'Entrada estacionamiento': (33, -0.75),
+    'VI-PB04': (47, 1.25),
     'Canchas': (50, -0.5),
     'Mini circuito': (53.5, 0),
-    'Escaleras 1 piso 1': (7, 1.125),
-    'Escaleras 2 piso 1': (26, 1.8),
+
+    # Piso 1
+    'Escaleras 1 piso 1': (5.6, 1.125),
+    'Escaleras 2 piso 1': (27.75, 1.75),
     'Escaleras 3 piso 1': (50, 1.8),
-    'Baños 1 piso 1': (9, 1.375),
-    'Baños 2 piso 1': (27, 1.9),
-    'Baños 3 piso 1': (51, 1.9),
-    'IV-101': (13, 1.275), 'IV-102': (18.2, 1.5), 'IV-103': (22, 1.7),
-    'V-101': (31, 1.8), 'V-102': (34, 1.8),
+
+    'IV-101': (13, 1.275), 
+    'IV-102': (18.2, 1.5), 
+    'IV-103': (22, 1.7),
+    'V-101': (31, 1.8), 
+    'V-102': (34, 1.8),
     'Ajedrez': (44, 1.8),
     'CID piso 1': (45, 1.5),
-    'Escaleras 1 piso 2': (7, 1.8),
-    'Escaleras 2 piso 2': (26, 2.30),
+
+    # Piso 2
+    'Escaleras 1 piso 2': (5.45, 1.8),
+    'Escaleras 2 piso 2': (27.75, 2.40),
     'Escaleras 3 piso 2': (50, 2.45),
-    'III-201': (-4, 1.75), 'III-202': (-1.5, 1.75), 'Secretaría administrativa': (4, 1.8),
-    'Secretaría académica': (12, 1.95), 'Secretaría general': (15, 2.05), 'Sala de juntas': (19, 2.15), 'Dirección': (22, 2.25),
-    'Secretaría de atención a la comunidad y vinculación': (30, 2.45), 'Servicios escolares': (34, 2.45),
-    'VI-201': (38, 2.45), 'VI-202': (41, 2.45), 'VI-203': (44, 2.45), 'VI-204': (47, 2.45),
-    'Baños 1 piso 2': (9, 1.95), 
-    'Baños 2 piso 2': (27, 2.45), 
-    'Baños 3 piso 2': (51, 2.55),
-    'Escaleras 1 piso 3': (7, 2.3),
-    'Escaleras 2 piso 3': (26, 2.9),
+
+    'III-201': (-4, 1.75), 
+    'III-202': (-1.5, 1.75), 
+    'Secretaría administrativa': (4, 1.8),
+    'Secretaría académica': (12, 1.95), 
+    'Secretaría general': (15, 2.05), 
+    'Sala de juntas': (19, 2.15), 
+    'Dirección': (22, 2.25),
+    'Unidad Jurídica': (29, 2.43),
+    'Secretaría de atención a la comunidad y vinculación': (30, 2.45), 
+    'Servicios escolares': (34, 2.45),
+    'VI-201': (38, 2.45), 
+    'VI-202': (41, 2.45), 
+    'VI-203': (44, 2.45), 
+    'VI-204': (47, 2.45),
+
+    # Piso 3
+    'Escaleras 1 piso 3': (5.35, 2.3),
+    'Escaleras 2 piso 3': (27.75, 3),
     'Escaleras 3 piso 3': (50, 3),
-    'III-301': (-4, 2.3), 'III-302': (-1.5, 2.3), 'III-303': (1, 2.3), 'III-304': (4.5, 2.3),
-    'IV-301': (12, 2.5), 'IV-302': (15, 2.60), 'IV-303': (17, 2.65), 'IV-304': (20, 2.72), 'IV-305': (22, 2.8),
-    'V-301': (29, 3), 'V-302': (31, 3), 'V-303': (33, 3), 'V-304': (35.5, 3),
-    'VI-301': (38, 3), 'VI-302': (41, 3), 'VI-303': (44, 3), 'VI-304': (47, 3),
+
+    'III-301': (-4, 2.3), 
+    'III-302': (-1.5, 2.3), 
+    'III-303': (1, 2.3), 
+    'III-304': (4.5, 2.3),
+    'IV-301': (12, 2.5), 
+    'IV-302': (15, 2.60), 
+    'IV-303': (17, 2.65), 
+    'IV-304': (20, 2.72), 
+    'IV-305': (22, 2.8),
+    'V-301': (29, 3), 
+    'V-302': (31, 3), 
+    'V-303': (33, 3), 
+    'V-304': (35.5, 3),
+    'VI-301': (38, 3), 
+    'VI-302': (41, 3), 
+    'VI-303': (44, 3), 
     'CID piso 3': (45, 2.75),
-    'Baños 1 piso 3': (9, 2.45), 
-    'Baños 2 piso 3': (27, 3.1), 
-    'Baños 3 piso 3': (51, 3.15),
-    'Escaleras 1 piso 4': (7, 3),
-    'Escaleras 2 piso 4': (26, 3.5),
+    'VI-304': (47, 3),
+
+    # Piso 4
+    'Escaleras 1 piso 4': (5.25, 3),
+    'Escaleras 2 piso 4': (27.75, 3.5),
     'Escaleras 3 piso 4': (50, 3.5),
+
     'Zona de docentes 1': (3, 3),
-    'Zona de docentes 2': (14, 3.2), 'Zona de docentes 3': (17, 3.3), 'Zona de docentes 4': (20, 3.4), 'Zona de docentes 5': (22, 3.45),
-    'V-401': (29, 3.5), 'V-402': (31, 3.5), 'V-403': (33, 3.5), 'V-404': (35.5, 3.5),
-    'VI-401': (38, 3.5), 'VI-402': (41, 3.5), 'VI-403': (44, 3.5), 'VI-404': (47, 3.5),
+    'Zona de docentes 2': (14, 3.2), 
+    'Zona de docentes 3': (17, 3.3), 
+    'Zona de docentes 4': (20, 3.4), 
+    'Zona de docentes 5': (22, 3.45),
+    'V-401': (29, 3.5), 
+    'V-402': (31, 3.5), 
+    'V-403': (33, 3.5), 
+    'V-404': (35.5, 3.5),
+    'VI-401': (38, 3.5), 
+    'VI-402': (41, 3.5), 
     'CID piso 4': (42.7, 3.25),
-    'Baños 1 piso 4': (9, 3.2), 
-    'Baños 2 piso 4': (27, 3.65), 
-    'Baños 3 piso 4': (51, 3.65),
-    'Escaleras 1 piso 5': (7, 3.6),
-    'Escaleras 2 piso 5': (26, 4),
+    'VI-403': (44, 3.5), 
+    'VI-404': (47, 3.5),
+
+    # Piso 5
+    'Escaleras 1 piso 5': (5.15, 3.6),
+    'Escaleras 2 piso 5': (27.75, 4),
     'Escaleras 3 piso 5': (50, 4),
+
     'Paneles solares': (0, 3.7),
-    'Jardineras': (32, 3.9), 'Gym al aire libre': (39, 3.9),
-    'Baños 1 piso 5': (9, 3.85), 'Baños 2 piso 5': (27, 4.2)
+    'Jardineras': (32, 4.1), 
+    'Gym al aire libre': (39, 3.9)
 }
 
 G = generar_grafo()
+
 
 class PeticionRuta(BaseModel):
     origen: str
     destino: str
 
+# Conexión con la interfaz web (HTML)
 @app.get("/")
 def serve_home():
     return FileResponse("index.html")
@@ -160,7 +228,8 @@ def trazar_ruta(peticion: PeticionRuta):
             "PC Puma": "CID planta baja",
             "Cajas": "Secretaría administrativa"
         }
-        
+
+        # Validación de nodos de origen y destino
         origen_real = alias_nodos.get(peticion.origen, peticion.origen)
         destino_real = alias_nodos.get(peticion.destino, peticion.destino)
 
@@ -280,6 +349,7 @@ def trazar_ruta(peticion: PeticionRuta):
         img_final.save(buffer, format="WEBP", quality=85) 
         img_b64 = base64.b64encode(buffer.getvalue()).decode()
 
+        # Mostrar nombres seleccionados (alias) y no reales 
         camino_mostrar = ruta.copy()
         camino_mostrar[0] = peticion.origen
         camino_mostrar[-1] = peticion.destino
@@ -293,34 +363,42 @@ def trazar_ruta(peticion: PeticionRuta):
             # Revisamos si el nodo es una escalera
             if "Escaleras" in nodo:
                 palabras = nodo.split()
-                prefix = palabras[0] + " " + palabras[1] 
+                prefix = f"{palabras[0]} {palabras[1]}" 
                 
                 j = i
+                # Avanzamos mientras los nodos siguientes tengan el mismo prefijo (escaleras)
                 while j < len(camino_mostrar) and camino_mostrar[j].startswith(prefix):
                     j += 1
                 
                 nodos_escalera = j - i
-                
-                if nodos_escalera < 3:
-                    nodo_destino_escalera = camino_mostrar[j - 1]
-                    nivel_crudo = nodo_destino_escalera.replace(prefix, "").strip().lower()
-                    nivel_destino = nivel_crudo
 
-                    if "planta baja" in nivel_crudo:
-                        destino_formato = f"la {nivel_crudo}"
-                    else:
-                        destino_formato = f"el {nivel_destino}"
-                    
-                    elevador_nombre = prefix.replace("Escaleras", "Elevador (o escaleras)") 
-                    camino_resumido.append(f"🛗 {elevador_nombre} hasta {destino_formato}")
+                # Si solo hay un nodo de escalera, lo agregamos tal cual
+                if nodos_escalera == 1:
+                    camino_resumido.append(nodo)
+                # Si hay más de un nodo de escalera, resumimos la instrucción
                 else:
-                    for k in range(i, j):
-                        camino_resumido.append(camino_mostrar[k])
+                    nodo_origen = camino_mostrar[i]
+                    nodo_destino = camino_mostrar[j - 1]
+
+                    nivel_original = nodo_destino.replace(prefix, "").strip().lower()
+                    if "planta baja" in nivel_original:
+                        destino_formato = f"la {nivel_original}"
+                    else:
+                        destino_formato = f"el {nivel_original}"
+                    
+                    # Excepción para el sótano de las escaleras 2 (sin elevador)
+                    if "Escaleras 2 sótano" in [nodo_origen, nodo_destino]:
+                        camino_resumido.append(f"🚶‍♂️ {prefix} hasta {destino_formato}")
+                    else:
+                        elevador_nombre = prefix.replace("Escaleras", "Elevador (o escaleras)")
+                        camino_resumido.append(f"🛗 {elevador_nombre} hasta {destino_formato}")
+                
                 i = j
             else:
                 camino_resumido.append(nodo)
                 i += 1
 
+        # Generar intrucciones resumidas para el usuario
         return {
             "exito": True,
             "distancia": round(distancia, 1),
@@ -328,6 +406,8 @@ def trazar_ruta(peticion: PeticionRuta):
             "imagen": f"data:image/webp;base64,{img_b64}" 
         }
 
+    
+    # Manejo de errores
     except nx.NetworkXNoPath:
         return {"exito": False, "error": "No se encontró una ruta válida entre estos dos puntos."}
     except Exception as e:
