@@ -360,7 +360,7 @@ def trazar_ruta(peticion: PeticionRuta):
             nodo = camino_mostrar[i]
             
             # Revisamos si el nodo es una escalera
-            if "Escaleras" in nodo:
+            if "Escaleras" or "Elevador" in nodo:
                 palabras = nodo.split()
                 prefix = f"{palabras[0]} {palabras[1]}" 
                 
