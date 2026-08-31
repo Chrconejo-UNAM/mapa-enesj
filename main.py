@@ -361,9 +361,12 @@ def trazar_ruta(peticion: PeticionRuta):
             nodo = camino_mostrar[i]
             
             # Revisamos si el nodo es una escalera
-            if "Escaleras" in nodo:
-                palabras = nodo.split()
-                prefix = f"{palabras[0]} {palabras[1]}" 
+            if "Escaleras" in nodo or nodo == "Elevador sótano":
+                if nodo == "Elevador sótano":
+                    prefix = "Escaleras 2"
+                else:
+                    palabras = nodo.split()
+                    prefix = f"{palabras[0]} {palabras[1]}" 
                 
                 j = i
 
@@ -375,8 +378,8 @@ def trazar_ruta(peticion: PeticionRuta):
                 
                 nodos_escalera = j - i
 
-                # Si solo hay un nodo de escalera, lo agregamos tal cual
-                if nodos_escalera == 1:
+                # Si solo hay un nodo de escalera, lo agregamos tal cual 
+                if nodos_escalera == 1 and camino_mostrar[i] != "Elevador sótano":
                     camino_resumido.append(nodo)
                 # Si hay más de un nodo de escalera, resumimos la instrucción
                 else:
