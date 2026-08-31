@@ -38,7 +38,8 @@ app.add_middleware(
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
-    
+
+    response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none';"
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
@@ -365,6 +366,9 @@ def trazar_ruta(peticion: PeticionRuta):
                 prefix = f"{palabras[0]} {palabras[1]}" 
                 
                 j = i
+
+                if camino_mostrar[j] == "Elevador sótano":
+                    j += 1
                 # Avanzamos mientras los nodos siguientes tengan el mismo prefijo (escaleras)
                 while j < len(camino_mostrar) and camino_mostrar[j].startswith(prefix):
                     j += 1
@@ -387,8 +391,6 @@ def trazar_ruta(peticion: PeticionRuta):
                     
                     # Excepción para el sótano de las escaleras 2 (sin elevador)
                     if "Escaleras 2 sótano" in [nodo_origen, nodo_destino]:
-                        camino_resumido.append(f"{prefix} hasta {destino_formato}")
-                    elif "Elevador sótano" in [nodo_origen, nodo_destino]:
                         camino_resumido.append(f"{prefix} hasta {destino_formato}")
                     else:
                         elevador_nombre = prefix.replace("Escaleras", "Elevador (o escaleras)")
