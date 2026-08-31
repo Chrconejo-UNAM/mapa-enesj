@@ -360,7 +360,7 @@ def trazar_ruta(peticion: PeticionRuta):
             nodo = camino_mostrar[i]
             
             # Revisamos si el nodo es una escalera
-            if "Escaleras" or "Elevador" in nodo:
+            if "Escaleras" in nodo:
                 palabras = nodo.split()
                 prefix = f"{palabras[0]} {palabras[1]}" 
                 
@@ -387,10 +387,12 @@ def trazar_ruta(peticion: PeticionRuta):
                     
                     # Excepción para el sótano de las escaleras 2 (sin elevador)
                     if "Escaleras 2 sótano" in [nodo_origen, nodo_destino]:
-                        camino_resumido.append(f"🚶‍♂️ {prefix} hasta {destino_formato}")
+                        camino_resumido.append(f"{prefix} hasta {destino_formato}")
+                    elif "Elevador sótano" in [nodo_origen, nodo_destino]:
+                        camino_resumido.append(f"{prefix} hasta {destino_formato}")
                     else:
                         elevador_nombre = prefix.replace("Escaleras", "Elevador (o escaleras)")
-                        camino_resumido.append(f"🛗 {elevador_nombre} hasta {destino_formato}")
+                        camino_resumido.append(f"{elevador_nombre} hasta {destino_formato}")
                 
                 i = j
             else:
