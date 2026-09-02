@@ -1,5 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@font-face {
+    font-family: 'Roboto';
+    src: url('roboto-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap; 
+}
 
+@font-face {
+    font-family: 'Roboto';
+    src: url('roboto-bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
         :root {
             --unam-blue: #002B7A;
             --unam-gold: #BB8800;
