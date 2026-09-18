@@ -140,7 +140,7 @@ pos = {
     'Secretaría general': (15, 2.05), 
     'Sala de juntas': (19, 2.15), 
     'Dirección': (22, 2.25),
-    'Unidad Jurídica': (29, 2.43),
+    'Unidad Jurídica': (28.5, 2.43),
     'Secretaría de atención a la comunidad y vinculación': (30, 2.45), 
     'Servicios escolares': (34, 2.45),
     'VI-201': (38, 2.45), 
