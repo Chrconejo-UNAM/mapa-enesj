@@ -60,7 +60,7 @@ def generar_grafo():
 
     rutas_p1 = [('Escaleras 1 piso 1', 'IV-101', 9), ('IV-101', 'IV-102', 17), ('IV-102', 'IV-103', 17), ('IV-103', 'Escaleras 2 piso 1', 15), ('Escaleras 2 piso 1', 'V-101', 10), ('V-101', 'V-102', 18), ('V-102', 'Ajedrez', 31.5), ('CID piso 1', 'Ajedrez', 14), ('Ajedrez', 'Escaleras 3 piso 1', 13)]
 
-    rutas_p2 = [('III-201', 'III-202', 8), ('III-202', 'Secretaría administrativa', 8), ('Secretaría administrativa', 'Escaleras 1 piso 2', 11), ('Escaleras 1 piso 2', 'Secretaría académica', 15.5), ('Secretaría académica', 'Secretaría general', 6.5), ('Secretaría general', 'Sala de juntas', 19.9), ('Sala de juntas', 'Dirección', 7.5), ('Dirección', 'Escaleras 2 piso 2', 8.5), ('Escaleras 2 piso 2', 'Secretaría de atención a la comunidad y vinculación', 6), ('Secretaría de atención a la comunidad y vinculación', 'Servicios escolares', 9), ('Servicios escolares', 'VI-201', 9), ('VI-201', 'VI-202', 5), ('VI-202', 'VI-203', 5), ('VI-203', 'VI-204', 5), ('VI-204', 'Escaleras 3 piso 2', 5)]
+    rutas_p2 = [('III-201', 'III-202', 8), ('III-202', 'Secretaría administrativa', 8), ('Secretaría administrativa', 'Escaleras 1 piso 2', 11), ('Escaleras 1 piso 2', 'Secretaría académica', 15.5), ('Secretaría académica', 'Secretaría general', 6.5), ('Secretaría general', 'Sala de juntas', 19.9), ('Sala de juntas', 'Dirección', 7.5), ('Dirección', 'Escaleras 2 piso 2', 8.5), ('Escaleras 2 piso 2', 'Unidad Jurídica', 6), ('Unidad Jurídica', 'Secretaría de atención a la comunidad y vinculación', 1 ('Secretaría de atención a la comunidad y vinculación', 'Servicios escolares', 9), ('Servicios escolares', 'VI-201', 9), ('VI-201', 'VI-202', 5), ('VI-202', 'VI-203', 5), ('VI-203', 'VI-204', 5), ('VI-204', 'Escaleras 3 piso 2', 5)]
 
     rutas_p3 = [('III-301', 'III-302', 8), ('III-302', 'III-303', 8), ('III-303', 'III-304', 8), ('III-304', 'Escaleras 1 piso 3', 5), ('Escaleras 1 piso 3', 'IV-301', 9), ('IV-301', 'IV-302', 10), ('IV-302', 'IV-303', 9.8), ('IV-303', 'IV-304', 10), ('IV-304', 'IV-305', 10), ('IV-305', 'Escaleras 2 piso 3', 9), ('Escaleras 2 piso 3', 'V-301', 5), ('V-301', 'V-302', 5), ('V-302', 'V-303', 5), ('V-303', 'V-304', 5), ('V-304', 'VI-301', 5), ('VI-301', 'VI-302', 5), ('VI-302', 'VI-303', 5), ('VI-303', 'CID piso 3', 14), ('VI-303', 'VI-304', 5), ('VI-304', 'Escaleras 3 piso 3', 5)]
 
@@ -220,7 +220,6 @@ def trazar_ruta(peticion: PeticionRuta):
     try:
         alias_nodos = {
             "Objetos perdidos": "Secretaría de atención a la comunidad y vinculación",
-            "Unidad jurídica": "Secretaría de atención a la comunidad y vinculación",
             "Centro de lenguas": "Secretaría de atención a la comunidad y vinculación",
             "Personas orientadoras de la comunidad": "Zona de docentes 1",
             "Observatorio de negocios internacionales": "Zona de docentes 1",
