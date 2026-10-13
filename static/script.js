@@ -19,7 +19,7 @@ const categoriasNodos = {
     ],
     '💼 SECRETARÍAS Y SERVICIOS': [
         'Cajas', 'Centro de lenguas', 'Dirección', 'Internacionalización', 'Lactancia', 'Médico', 'Nutrición', 'Objetos perdidos', 
-        'Observatorio de negocios internacionales', 'Psicopedagogía', 'Recepción', 
+        'Observatorio universitario de negocios internacionales', 'Psicopedagogía', 'Recepción', 
         'Sala de juntas', 'Secretaría académica', 'Secretaría administrativa', 
         'Secretaría de atención a la comunidad y vinculación', 'Secretaría general', 'Servicios escolares', 'Tics', 'Unidad jurídica', 'Personas orientadoras de la comunidad' 
     ],
@@ -34,25 +34,111 @@ const categoriasNodos = {
     ]
 };
 
-const selectOrigen = document.getElementById('origen');
-const selectDestino = document.getElementById('destino');
+const inputOrigen = document.getElementById('origen');
+const inputDestino = document.getElementById('destino');
+const listaOrigen = document.getElementById('lista-origen');
+const listaDestino = document.getElementById('lista-destino');
 
-// Llenar las listas dinámicamente respetando las categorías
-Object.keys(categoriasNodos).forEach(categoria => {
-    let optgroupOrigen = `<optgroup label="${categoria}">`;
-    let optgroupDestino = `<optgroup label="${categoria}">`;
-    
-    categoriasNodos[categoria].forEach(nodo => {
-        optgroupOrigen += `<option value="${nodo}">${nodo}</option>`;
-        optgroupDestino += `<option value="${nodo}">${nodo}</option>`;
+const masUsados = ['Entrada', 'Entrada estacionamiento', 'Cafetería', 'Auditorio', 'Servicios escolares', 'Unidad de investigación de órtesis y prótesis'];
+
+function generarHTMLOpciones() {
+    let html = `<div class="optgroup-label">⭐ MÁS USADOS</div>`;
+    masUsados.forEach(nodo => {
+        html += `<div class="opcion-item" data-value="${nodo}">${nodo}</div>`;
     });
 
-    optgroupOrigen += `</optgroup>`;
-    optgroupDestino += `</optgroup>`;
+    Object.keys(categoriasNodos).forEach(categoria => {
+        html += `<div class="optgroup-label">${categoria}</div>`;
+        categoriasNodos[categoria].forEach(nodo => {
+            html += `<div class="opcion-item" data-value="${nodo}">${nodo}</div>`;
+        });
+    });
+    return html;
+}
 
-    selectOrigen.innerHTML += optgroupOrigen;
-    selectDestino.innerHTML += optgroupDestino;
-});
+const htmlOpciones = generarHTMLOpciones();
+listaOrigen.innerHTML = htmlOpciones;
+listaDestino.innerHTML = htmlOpciones;
+
+// Configurar la lógica de búsqueda, click y teclado
+function configurarBuscador(input, lista) {
+    input.addEventListener('focus', () => {
+        lista.classList.add('activa');
+        filtrarLista(input, lista);
+    });
+
+    input.addEventListener('input', () => {
+        lista.classList.add('activa');
+        filtrarLista(input, lista);
+    });
+
+    lista.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('opcion-item')) {
+            input.value = e.target.getAttribute('data-value');
+            lista.classList.remove('activa');
+        }
+    });
+
+    input.addEventListener('blur', () => {
+        setTimeout(() => lista.classList.remove('activa'), 150);
+    });
+}
+
+// Función que oculta los elementos que no coinciden con la búsqueda
+function filtrarLista(input, lista) {
+    const texto = input.value.toLowerCase();
+    const items = lista.querySelectorAll('.opcion-item');
+    const labels = lista.querySelectorAll('.optgroup-label');
+
+    items.forEach(item => {
+        if (item.innerText.toLowerCase().includes(texto)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    labels.forEach(label => {
+        let next = label.nextElementSibling;
+        let tieneVisibles = false;
+        while (next && next.classList.contains('opcion-item')) {
+            if (next.style.display === 'block') tieneVisibles = true;
+            next = next.nextElementSibling;
+        }
+        label.style.display = tieneVisibles ? 'block' : 'none';
+    });
+}
+
+configurarBuscador(inputOrigen, listaOrigen);
+configurarBuscador(inputDestino, listaDestino);
+
+// Lectura de parámetros desde la URL para prellenar los campos de origen y destino 
+
+const parametrosURL = new URLSearchParams(window.location.search);
+
+// Extraer los valores (ej. ?origen=Cafetería&destino=Auditorio)
+const origenDesdeQR = parametrosURL.get('origen');
+const destinoDesdeQR = parametrosURL.get('destino');
+
+function esLugarValido(lugar) {
+    let valido = false;
+    Object.values(categoriasNodos).forEach(nodos => {
+        if (nodos.includes(lugar)) {
+            valido = true;
+        }
+    });
+    return valido;
+}
+
+if (origenDesdeQR && esLugarValido(origenDesdeQR)) {
+    inputOrigen.value = origenDesdeQR;
+} else {
+    inputOrigen.value = "Entrada"; 
+}
+
+if (destinoDesdeQR && esLugarValido(destinoDesdeQR)) {
+    inputDestino.value = destinoDesdeQR;
+}
 
 // Función para trazar la ruta
 async function trazarRuta() {
@@ -60,7 +146,6 @@ async function trazarRuta() {
     const destino = document.getElementById('destino').value;
     const btn = document.getElementById('btn-trazar');
     
-    // Ocultar todas las alertas antes de iniciar
     document.getElementById('alerta-error').style.display = 'none';
     document.getElementById('alerta-distancia').style.display = 'none';
     document.getElementById('alerta-camino').style.display = 'none';
