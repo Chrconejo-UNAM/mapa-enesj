@@ -6,6 +6,16 @@
     <title>Mapa ENES Juriquilla</title>
     <link rel="icon" href="static/logo_unam_dorado.webp" type="image/webp">
     <link rel="stylesheet" href="static/styles.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-EDWKD13KDD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-EDWKD13KDD');
+    </script>
 </head>
 <body>
 
@@ -49,29 +59,17 @@
         </details>
 
         <div class="caja-control">
-           <label>Estás en:</label>
-            <select id="origen">
-                <optgroup label="MÁS USADOS ">
-                    <option value="Entrada" selected>Entrada</option>
-                    <option value="Entrada estacionamiento">Entrada estacionamiento</option>
-                    <option value="Cafetería">Cafetería</option>
-                    <option value="Auditorio">Auditorio</option>
-                    <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Unidad de investigación de órtesis y prótesis">Unidad de investigación de órtesis y prótesis</option>
-                </optgroup>
-                </select>
+            <label>Estás en:</label>
+            <div class="buscador-container">
+                <input type="text" id="origen" class="input-buscador" placeholder="Escribe o selecciona tu ubicación..." autocomplete="off">
+                <div class="lista-opciones" id="lista-origen"></div>
+            </div>
 
             <label>Vas a:</label>
-            <select id="destino">
-                <optgroup label="MÁS USADOS ">
-                    <option value="Entrada">Entrada</option>
-                    <option value="Entrada estacionamiento">Entrada estacionamiento</option>
-                    <option value="Cafetería">Cafetería</option>
-                    <option value="Auditorio">Auditorio</option>
-                    <option value="Servicios escolares">Servicios escolares</option>
-                    <option value="Unidad de investigación de órtesis y prótesis">Unidad de investigación de órtesis y prótesis</option>
-                </optgroup>
-                </select>
+            <div class="buscador-container">
+                <input type="text" id="destino" class="input-buscador" placeholder="Escribe o selecciona tu destino..." autocomplete="off">
+                <div class="lista-opciones" id="lista-destino"></div>
+            </div>
 
             <button onclick="trazarRuta()" class="btn-trazar" id="btn-trazar">Trazar Ruta</button>
         </div>
