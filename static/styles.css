@@ -199,7 +199,12 @@ label {
     color: var(--text-color);
 }
 
-select {
+.buscador-container {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-buscador {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
@@ -208,7 +213,60 @@ select {
     color: var(--input-text);
     font-size: 16px;
     font-family: inherit;
-    margin-bottom: 20px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.input-buscador:focus {
+    outline: none;
+    border-color: var(--unam-gold);
+}
+
+.lista-opciones {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.lista-opciones.activa {
+    display: block;
+}
+
+.optgroup-label {
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--unam-gold);
+    background-color: var(--bg-color);
+    position: sticky;
+    top: 0; 
+}
+
+.opcion-item {
+    padding: 12px;
+    cursor: pointer;
+    color: var(--text-color);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 15px;
+    transition: background-color 0.2s;
+}
+
+.opcion-item:last-child {
+    border-bottom: none;
+}
+
+.opcion-item:hover {
+    background-color: var(--unam-blue);
+    color: white;
 }
 
 .btn-trazar {
