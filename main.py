@@ -222,7 +222,7 @@ def trazar_ruta(peticion: PeticionRuta):
             "Objetos perdidos": "Secretaría de atención a la comunidad y vinculación",
             "Centro de lenguas": "Secretaría de atención a la comunidad y vinculación",
             "Personas orientadoras de la comunidad": "Zona de docentes 1",
-            "Observatorio de negocios internacionales": "Zona de docentes 1",
+            "Observatorio universitario de negocios internacionales": "Zona de docentes 1",
             "Internacionalización": "Zona de docentes 1",
             "PC Puma": "CID planta baja",
             "Cajas": "Secretaría administrativa"
