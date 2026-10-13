@@ -132,8 +132,6 @@ function esLugarValido(lugar) {
 
 if (origenDesdeQR && esLugarValido(origenDesdeQR)) {
     inputOrigen.value = origenDesdeQR;
-} else {
-    inputOrigen.value = "Entrada"; 
 }
 
 if (destinoDesdeQR && esLugarValido(destinoDesdeQR)) {
